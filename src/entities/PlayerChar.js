@@ -105,23 +105,26 @@ class PlayerChar extends FrameSprite {
     // debugger
     const { controls, currentActions } = this
     Object.keys(actions).forEach((action) => {
+      let key = action[action]
       let isActive = false
       if (!Array.isArray(actions[action])) {
         isActive = controls.keys.key(actions[action])
       } else {
         for (let i = 0; i < actions[action].length; i++) {
-          isActive = isActive
-            ? isActive
-            : !!controls.keys.key(actions[action][i])
+          key = actions[action][i]
+          if (controls.keys.key(key)) {
+            isActive = true
+            break
+          }
         }
       }
 
       if (isActive) {
         // TODO: Clean the action syntax so we don't have to toLowerCase() everything
-        this[action]()
+        this[action](key)
       } else if (currentActions[action]) {
         this.currentActions[action] = false
-        this[`after${action}`]()
+        this[`after${action}`](key)
       }
     })
   }

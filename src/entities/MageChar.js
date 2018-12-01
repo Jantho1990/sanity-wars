@@ -151,11 +151,7 @@ class MageChar extends PlayerChar {
   }
 
   switchActiveSpell () {
-    this.spellcaster.spells.forEach((spell) => {
-      if (this.controls.keys.key(spell.hotkey)) {
-        this.activeSpell = spell.name
-      }
-    })
+    this.spellcaster.switchActiveSpell()
   }
 
   addBuff (buff) {
