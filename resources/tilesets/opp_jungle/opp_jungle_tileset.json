@@ -1,5 +1,5 @@
 { "columns":28,
- "image":"..\/..\/..\/..\/sanity-wars\/resources\/tilesets\/opp_jungle\/Jungle_terrain.png",
+ "image":"Jungle_terrain.png",
  "imageheight":480,
  "imagewidth":896,
  "margin":0,
@@ -119,6 +119,49 @@
         }, 
         {
          "id":34,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":0,
+                     "id":3,
+                     "name":"",
+                     "polygon":[
+                            {
+                             "x":-0.484375,
+                             "y":-0.265625
+                            }, 
+                            {
+                             "x":-27.484375,
+                             "y":27.75
+                            }, 
+                            {
+                             "x":-27.453125,
+                             "y":31.734375
+                            }, 
+                            {
+                             "x":4.515625,
+                             "y":31.75
+                            }, 
+                            {
+                             "x":4.484375,
+                             "y":-0.234375
+                            }],
+                     "rotation":0,
+                     "type":"collision",
+                     "visible":true,
+                     "width":0,
+                     "x":27.5,
+                     "y":0.25
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"walkable",

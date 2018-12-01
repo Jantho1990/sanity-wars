@@ -65,6 +65,10 @@ function tiledParser(json) {
       ret[prop.name] = prop.value
     })
 
+    if (tile.objectgroup) {
+      ret['objects'] = tile.objectgroup.objects.map(object => object)
+    }
+
     return ret
   }
 

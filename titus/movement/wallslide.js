@@ -57,6 +57,7 @@ export default function wallslide(ent, map, x = 0, y = 0) {
   if (x !== 0) {
     tiles = map.tilesAtCorners(bounds, xo, yo)
     const [tl, tr, bl, br] = tiles.map(t => t && t.frame.walkable)
+    const collisions = tiles.map(t => map.getTileCollisions(t))
 
     // Hit left edge
     if (x < 0 && !(tl && bl)) {
