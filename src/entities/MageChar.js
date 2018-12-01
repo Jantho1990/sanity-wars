@@ -117,11 +117,9 @@ class MageChar extends PlayerChar {
     this.buffs.update(dt, t)
     this.updateGameData()
 
-    window.Debug.addLine('Movement', `${this.pos.x}, ${this.pos.y}`)
-
     this.hp.current = this.spellcaster.manaCurrent
 
-    /* if (!this.hasDied && this.dying) {
+    if (!this.hasDied && this.dying) {
       this.anims.play('dying', 1)
       if (this.anims.getCurrentFrame() === this.anims.currentAnim.frames.length - 1) {
         this.hasDied = true
@@ -129,7 +127,7 @@ class MageChar extends PlayerChar {
       }
     } else if (this.hp.current === 0) {
       this.die()
-    } */
+    }
 
     window.Debug.addLine('HP', this.hp.current)
 

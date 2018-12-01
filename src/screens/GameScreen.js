@@ -124,12 +124,14 @@ class GameScreen extends Container {
     const { bullets, enemies, player } = this
 
     bullets.map(bullet => {
-      enemies.map(enemy => {
-        if (entity.hit(enemy, bullet)) {
-          bullet.dead = true
-          enemy.hit(bullet.dmg)
-        }
-      })
+      if (enemies) {
+        enemies.map(enemy => {
+          if (entity.hit(enemy, bullet)) {
+            bullet.dead = true
+            enemy.hit(bullet.dmg)
+          }
+        })
+      }
     })
   }
 }
