@@ -76,7 +76,12 @@ export default function wallslide(ent, map, x = 0, y = 0) {
     }
 
     // If we hit a collision slope, calculate how much height needs to be added
-    collisions.forEach(collision => {
+    collisions.forEach((collision, a) => {
+      // if we aren't moving, no need to calculate
+      if (xo < 1) {
+        // return
+      }
+
       const slopes = collision.filter(o => o.name = 'slope')
       slopes.forEach(slope => {
         // get the correct point coordinates
@@ -99,12 +104,23 @@ export default function wallslide(ent, map, x = 0, y = 0) {
           }
         }
 
-        const [pos] = line.filter(l => l.y === 0)
-        yo -= math.pointSlopeY(pos, m, xo)
+        const [pos] = line.filter(l => l.x === 0)
+        const xmov = (xo * ent.dir)
+        if (math.pointSlopeY(pos, m, xmov) > 0) {
+          // debugger
+        }
+        const offset = math.pointSlopeY(pos, m, xmov)
+        if (yo < 10 && ent.pos.y - offset <= tiles[a].pos.y + tiles[a].h - offset) {
+          // ent.pos.y -= offset
+          yo -= offset
+        }
+        window.Debug.addLine('yo slope', math.pointSlopeY(pos, m, xo))
         // debugger
       })
     })
   }
+
+  window.Debug.addLine('yo', yo)
 
   // xo and yo contain the amount we're allowed to move by
   return {

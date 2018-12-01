@@ -143,7 +143,7 @@ export function pointSlopeY (pos, slope, x) {
   // y = m(x - x1) + y1
   const { x: x1, y: y1 } = pos
 
-  return slope * (x - x1) + y1
+  return (slope * (x - x1)) + y1
 }
 
 function smoothstep(value, inf = 0, sup = 1) {
