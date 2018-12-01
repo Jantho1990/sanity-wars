@@ -1,5 +1,6 @@
 import UserInterface from '../../titus/UserInterface'
 import SanityBarComponent from './SanityBarComponent'
+import Game from '../../titus/Game';
 
 class Overlay extends UserInterface {
   constructor (w, h, parent) {
@@ -7,8 +8,8 @@ class Overlay extends UserInterface {
 
     this.sanityBar = new SanityBarComponent({
       pos: {
-        x: 200,
-        y: 200
+        x: Game.pixelAtPercent(2.5, w),
+        y: Game.pixelAtPercent(92.5, h)
       }
     })
     this.addComponent(this.sanityBar)
