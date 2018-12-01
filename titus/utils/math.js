@@ -130,11 +130,11 @@ export function slope (pos1, pos2) {
 }
 
 /**
- * Find a second point on a polygon's slope.
+ * Find a second point on a triangle's slope.
  *
  * @param {object} pos A cartesian coordiante.
- * @param {number} slope The slope of a polygon.
- * @param {number} x Amount moved onto the polygon.
+ * @param {number} slope The slope of a triangle.
+ * @param {number} x Amount moved onto the triangle.
  *
  * @return {object} A cartesian coordiante.
  */
@@ -159,11 +159,13 @@ export default {
   ease,
   lerp,
   mix,
+  pointSlopeY,
   rand,
   randf,
   randOneFrom,
   randOneIn,
   randomSeed,
+  slope,
   smoothstep,
   useSeededRandom
 }

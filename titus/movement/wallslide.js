@@ -1,4 +1,5 @@
 import entity from '../utils/entity'
+import math from '../utils/math'
 
 /*
   Expects:
@@ -58,6 +59,7 @@ export default function wallslide(ent, map, x = 0, y = 0) {
     tiles = map.tilesAtCorners(bounds, xo, yo)
     const [tl, tr, bl, br] = tiles.map(t => t && t.frame.walkable)
     const collisions = tiles.map(t => map.getTileCollisions(t))
+      .filter(c => c !== null)
 
     // Hit left edge
     if (x < 0 && !(tl && bl)) {
@@ -72,6 +74,36 @@ export default function wallslide(ent, map, x = 0, y = 0) {
       tileEdge = tiles[TR].pos.x - 1 // top-right tile x-coordinate minus 1 pixel
       xo = tileEdge - (bounds.x + bounds.w) // tile edge minus offset of entity bounds width
     }
+
+    // If we hit a collision slope, calculate how much height needs to be added
+    collisions.forEach(collision => {
+      const slopes = collision.filter(o => o.name = 'slope')
+      slopes.forEach(slope => {
+        // get the correct point coordinates
+        const points = slope.polygon.map(p => {
+          return { x: p.x + slope.x, y: p.y + slope.y }
+        })
+
+        // find the angled line
+        let line, m
+        for (let i = 0; i < points.length; i++) {
+          if (i !== 0) {
+            line = [points[i], points[i - 1]]
+          } else {
+            line = [points[i], points[points.length - 1]]
+          }
+
+          m = math.slope(...line)
+          if (m !== 0) {
+            break
+          }
+        }
+
+        const [pos] = line.filter(l => l.y === 0)
+        yo -= math.pointSlopeY(pos, m, xo)
+        // debugger
+      })
+    })
   }
 
   // xo and yo contain the amount we're allowed to move by
