@@ -1,17 +1,17 @@
 import UserInterface from '../../titus/UserInterface'
-import ManaBarComponent from './ManaBarComponent'
+import SanityBarComponent from './SanityBarComponent'
 
 class Overlay extends UserInterface {
   constructor (w, h, parent) {
     super(w, h, parent)
 
-    this.manaBar = new ManaBarComponent({
+    this.sanityBar = new SanityBarComponent({
       pos: {
         x: 200,
         y: 200
       }
     })
-    this.addComponent(this.manaBar)
+    this.addComponent(this.sanityBar)
   }
 }
 

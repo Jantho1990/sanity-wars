@@ -4,14 +4,14 @@ import { GameData } from "../../titus/Game";
 
 const styles = {
   manaTotal: {
-    fill: 'hsl(210, 5%, 25%)'
+    fill: 'hsl(270, 5%, 25%)'
   },
   manaCurrent: {
-    fill: 'hsl(210, 50%, 50%)'
+    fill: 'hsl(270, 40%, 60%)'
   }
 }
 
-class ManaBarComponent extends UserInterfaceComponent {
+class SanityBarComponent extends UserInterfaceComponent {
   constructor (config) {
     const { w, h, pos, percent } = config
     super(w, h, pos)
@@ -40,4 +40,4 @@ class ManaBarComponent extends UserInterfaceComponent {
   }
 }
 
-export default ManaBarComponent
+export default SanityBarComponent
