@@ -150,8 +150,10 @@ class MageChar extends PlayerChar {
     this.anims.play('slap', 1)
   }
 
-  switchActiveSpell () {
-    this.spellcaster.switchActiveSpell()
+  switchActiveSpell (key) {
+    const spell = this.spellcaster.getSpellByHotkey(key)
+    
+    this.activeSpell = spell.name
   }
 
   addBuff (buff) {

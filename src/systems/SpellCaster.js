@@ -63,6 +63,23 @@ class SpellCaster {
     }
   }
 
+  /**
+   * Find a spell by its hotkey.
+   *
+   * @param {number} key A number representing a character key.
+   *
+   * @return {object}
+   */
+  getSpellByHotkey (key) {
+    return this.spells.find(spell => {
+      if (!Array.isArray(spell.hotkey)) {
+        return spell.hotkey === key
+      } else {
+        return spell.hotkey.filter(hotkey => hotkey === key).length > 0
+      }
+    })
+  }
+
   switchActiveSpell() {
     this.spells.forEach((spell) => {
       if (this.player.controls.keys.key(spell.hotkey)) {
