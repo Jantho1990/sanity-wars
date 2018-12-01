@@ -1,4 +1,4 @@
-import tiledParser from '../titus/utils/tiledParser'
+import tiledParser from '../titus/utils/tiledParser-1_2'
 import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
 
