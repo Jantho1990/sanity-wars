@@ -1,6 +1,6 @@
 import PlayerChar from './PlayerChar'
 import Texture from '../../titus/Texture'
-import Spellcaster from '../spells/Spellcaster'
+import SanityCaster from '../systems/SanityCaster'
 import Container from '../../titus/Container'
 import SoundPool from '../../titus/sound/SoundPool'
 import { GameData } from '../../titus/Game';
@@ -63,7 +63,7 @@ class MageChar extends PlayerChar {
     this.hpCurrent = 10
     this.hpTotal = 10
 
-    this.spellcaster = new Spellcaster(this, [
+    this.spellcaster = new SanityCaster(this, [
       {
         name: 'Fireball',
         cost: 20,

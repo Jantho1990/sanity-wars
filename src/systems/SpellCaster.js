@@ -1,6 +1,6 @@
-import Spells from './SpellsList'
+import Spells from '../spells'
 
-class Spellcaster {
+class SpellCaster {
   constructor (player, spells, config) {
     const {
       manaTotal,
@@ -63,4 +63,4 @@ class Spellcaster {
   }
 }
 
-export default Spellcaster
+export default SpellCaster
