@@ -1,0 +1,12 @@
+{ "columns":8,
+ "image":"knight.png",
+ "imageheight":450,
+ "imagewidth":560,
+ "margin":0,
+ "name":"Knight",
+ "spacing":0,
+ "tilecount":40,
+ "tileheight":90,
+ "tilewidth":70,
+ "type":"tileset"
+}

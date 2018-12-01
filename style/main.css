@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'Squada One';
+    src: url('../fonts/SquadaOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Contrail One';
+    src: url('../fonts/ContrailOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Keania One';
+    src: url('../fonts/KeaniaOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Mitr';
+    src: url('../fonts/mitr/Mitr-Regular.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: hsl(0, 0%, 2%);
+    color: hsl(0, 100%, 100%);
+    text-align: center;
+}
+
+#board {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#board canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* background: radial-gradient(ellipse at 50% 100%, hsl(0, 50%, 50%) 0%, hsl(180, 80%, 90%) 10em); */
+}

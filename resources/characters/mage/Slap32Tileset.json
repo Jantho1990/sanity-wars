@@ -1,0 +1,19 @@
+{ "columns":3,
+ "grid":
+    {
+     "height":48,
+     "orientation":"orthogonal",
+     "width":32
+    },
+ "image":"slap32.png",
+ "imageheight":48,
+ "imagewidth":96,
+ "margin":0,
+ "name":"Slap32",
+ "spacing":0,
+ "tilecount":3,
+ "tileheight":32,
+ "tilewidth":32,
+ "transparentcolor":"#ff00ff",
+ "type":"tileset"
+}
