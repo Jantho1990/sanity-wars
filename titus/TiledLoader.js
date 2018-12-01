@@ -19,26 +19,32 @@ class TiledLoader {
     this.progress = 0
     this.loading = true
 
-    levels.forEach((level) => {
-      const { name: levelName, url, tileset } = level
-
-      this.levels[url] = this.loadLevel(levelName, url)
-      this.levelNames[levelName] = url
-    })
+    if (levels) {
+      levels.forEach((level) => {
+        const { name: levelName, url, tileset } = level
+  
+        this.levels[url] = this.loadLevel(levelName, url)
+        this.levelNames[levelName] = url
+      })
+    }
     
-    tilesets.forEach((tileset) => {
-      const { name: tilesetName, url } = tileset
-
-      this.tilesets[url] = this.loadTileset(tilesetName, url)
-      this.tilesetNames[tilesetName] = url
-    })
+    if (tilesets) {
+      tilesets.forEach((tileset) => {
+        const { name: tilesetName, url } = tileset
+  
+        this.tilesets[url] = this.loadTileset(tilesetName, url)
+        this.tilesetNames[tilesetName] = url
+      })
+    }
     
-    templates.forEach((template) => {
-      const { name: templateName, url } = template
-
-      this.templates[url] = this.loadTemplate(templateName, url)
-      this.templateNames[templateName] = url
-    })
+    if (templates) {
+      templates.forEach((template) => {
+        const { name: templateName, url } = template
+  
+        this.templates[url] = this.loadTemplate(templateName, url)
+        this.templateNames[templateName] = url
+      })
+    }
   }
 
   /**

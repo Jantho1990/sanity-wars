@@ -2,7 +2,7 @@ import tiledParser from '../titus/utils/tiledParser'
 import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
 
-const texture = new Texture("resources/tilesets/dirt-tiles/dirt-tiles-full.png")
+const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain.png")
 
 class TiledLevel extends TileMap {
   constructor (data, parsed) {

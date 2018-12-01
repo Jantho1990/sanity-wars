@@ -153,6 +153,15 @@ class AnimManager {
   }
 
   /**
+   * Return the currently playing anim.
+   *
+   * @return {object}
+   */
+  get currentAnim () {
+    return this.anims[this.current]
+  }
+
+  /**
    * Get the current frame of the current animation.
    *
    * @return {number}

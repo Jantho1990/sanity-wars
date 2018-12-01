@@ -63,6 +63,7 @@ class MageChar extends PlayerChar {
 
     this.canMove = true
     this.dying = false
+    this.hasDied = false
 
     this.spellcaster = new SanityCaster(this, [
       {
@@ -116,18 +117,24 @@ class MageChar extends PlayerChar {
     this.buffs.update(dt, t)
     this.updateGameData()
 
+    window.Debug.addLine('Movement', `${this.pos.x}, ${this.pos.y}`)
+
     this.hp.current = this.spellcaster.manaCurrent
 
-    if (this.dying) {
+    /* if (!this.hasDied && this.dying) {
       this.anims.play('dying', 1)
+      if (this.anims.getCurrentFrame() === this.anims.currentAnim.frames.length - 1) {
+        this.hasDied = true
+        this.dying = false
+      }
     } else if (this.hp.current === 0) {
       this.die()
-    }
+    } */
 
     window.Debug.addLine('HP', this.hp.current)
 
     // hack to stop walk
-    if (!this.dying && this.vel.x === 0) {
+    if (!this.hasDied && !this.dying && this.vel.x === 0) {
       this.anims.play('stand')
     }
   }
