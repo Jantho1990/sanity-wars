@@ -162,7 +162,6 @@ class MageChar extends PlayerChar {
   }
 
   afterSwitchActiveSpell () {
-    debugger
     this.spellcaster.cancelSacrifice()
   }
 

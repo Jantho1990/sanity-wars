@@ -122,9 +122,13 @@ class PlayerChar extends FrameSprite {
       if (isActive) {
         // TODO: Clean the action syntax so we don't have to toLowerCase() everything
         this[action](key)
+        this.currentActions[action] = true
       } else if (currentActions[action]) {
         this.currentActions[action] = false
-        this[`after${action[1].toUpperCase + action.substr(1)}`](key)
+        const afterAction = `after${action[0].toUpperCase() + action.substr(1)}`
+        if (this[afterAction]){
+          this[afterAction](key)
+        }
       }
     })
   }
