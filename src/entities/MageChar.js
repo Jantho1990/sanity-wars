@@ -82,8 +82,6 @@ class MageChar extends PlayerChar {
       manaCurrent: 100
     })
 
-    this.activeSpell = this.spellcaster.spells[0].spell.name
-
     this.buffs = new Container()
     
     this.hitBox = {
@@ -146,8 +144,10 @@ class MageChar extends PlayerChar {
   }
 
   cast () {
-    this.spellcaster.cast(this.activeSpell)
-    this.anims.play('slap', 1)
+    if (!!this.activeSpell) {
+      this.spellcaster.cast(this.activeSpell)
+      this.anims.play('slap', 1)
+    }
   }
 
   switchActiveSpell (key) {
