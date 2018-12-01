@@ -114,6 +114,38 @@ function useSeededRandom(blnUse = true) {
   random = blnUse ? randomSeeded : Math.random
 }
 
+/**
+ * Find the slope between two points.
+ *
+ * @param {object} pos1 A cartesian coordinate.
+ * @param {object} pos2 A second cartesian coordinate.
+ */
+export function slope (pos1, pos2) {
+  // m = (y2 - y1) // (x2 - x1)
+
+  const { x: x1, y: y1 } = pos1
+  const { x: x2, y: y2 } = pos2
+
+  return (y2 - y1) / (x2 -x1)
+}
+
+/**
+ * Find a second point on a polygon's slope.
+ *
+ * @param {object} pos A cartesian coordiante.
+ * @param {number} slope The slope of a polygon.
+ * @param {number} x Amount moved onto the polygon.
+ *
+ * @return {object} A cartesian coordiante.
+ */
+export function pointSlopeY (pos, slope, x) {
+  // y - y1 = m(x - x1)
+  // y = m(x - x1) + y1
+  const { x: x1, y: y1 } = pos
+
+  return slope * (x - x1) + y1
+}
+
 function smoothstep(value, inf = 0, sup = 1) {
   var x = clamp(lerp(value, inf, sup), 0, 1)
   return x * x * (3 - 2 * x) // smooth formula
