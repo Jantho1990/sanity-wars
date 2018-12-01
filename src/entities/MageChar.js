@@ -151,9 +151,19 @@ class MageChar extends PlayerChar {
   }
 
   switchActiveSpell (key) {
-    const spell = this.spellcaster.getSpellByHotkey(key)
-    
-    this.activeSpell = spell.name
+    const { spellcaster } = this
+    const spell = spellcaster.getSpellByHotkey(key)
+
+    if (spellcaster.isSacrificed(spell)) {
+      this.activeSpell = spell.name
+    } else {
+      spellcaster.sacrifice(spell)
+    }
+  }
+
+  afterSwitchActiveSpell () {
+    debugger
+    this.spellcaster.cancelSacrifice()
   }
 
   addBuff (buff) {

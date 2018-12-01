@@ -26,6 +26,7 @@ class SanityCaster extends SpellCaster {
 
     this.sacrificeTime = 1
     this.sacrificeTimeCounter = 0
+    this.baseRechargeAmount = rechargeAmount
   }
 
   /**
@@ -62,8 +63,28 @@ class SanityCaster extends SpellCaster {
     }
   } */
 
-  sacrificing (spell) {
+  sacrifice (spell) {
+    const { sacrificeTime, player: { dt, controls: { keys }} } = this
+    const sanityBuff = this.sanityBuffs.find(sb => sb.spell.name === spell.name)
 
+    if (sanityBuff) {
+      if ((this.sacrificeTimeCounter += dt) >= sacrificeTime) {
+        sanityBuff.sacrifice()
+
+        this.sanityBuffs = this.sanityBuffs.filter(sb => sb.spell.name !== sanityBuff.spell.name)
+        this.rechargeAmount -= (this.baseRechargeAmount * sanityBuff.boost)
+
+        this.sacrificeTimeCounter = 0
+      }
+    }
+  }
+
+  cancelSacrifice () {
+    this.sacrificeTimeCounter = 0
+  }
+
+  isSacrificed (spell) {
+    return !this.sanityBuffs.find(sb => sb.spell.name === spell.name)
   }
 }
 

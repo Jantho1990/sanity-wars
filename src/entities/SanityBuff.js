@@ -16,7 +16,7 @@ class SanityBuff {
   }
 
   sacrifice () {
-    debugger
+    this.sacrificed = true
   }
 }
 

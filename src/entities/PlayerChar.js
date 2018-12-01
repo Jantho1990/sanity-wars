@@ -63,10 +63,10 @@ class PlayerChar extends FrameSprite {
 
     // Flags to tell external systems when an action is being taken
     this.currentActions = {
-      UP: false,
-      DOWN: false,
-      LEFT: false,
-      RIGHT: false
+      up: false,
+      down: false,
+      left: false,
+      right: false
     }
 
     this.downActionCountdown = DROP_WAIT_TIME
@@ -124,7 +124,7 @@ class PlayerChar extends FrameSprite {
         this[action](key)
       } else if (currentActions[action]) {
         this.currentActions[action] = false
-        this[`after${action}`](key)
+        this[`after${action[1].toUpperCase + action.substr(1)}`](key)
       }
     })
   }
@@ -137,7 +137,7 @@ class PlayerChar extends FrameSprite {
     this.jump()
   }
 
-  afterup () {
+  afterUp () {
     // nothing here yet
   }
 
@@ -150,7 +150,7 @@ class PlayerChar extends FrameSprite {
    *
    * @return void
    */
-  afterdown () {
+  afterDown () {
     // nothing here yet
   }
 
@@ -160,7 +160,7 @@ class PlayerChar extends FrameSprite {
     this.applyHorizontalMovement()
   }
 
-  afterleft () {
+  afterLeft () {
     // nothing here yet
   }
 
@@ -170,7 +170,7 @@ class PlayerChar extends FrameSprite {
     this.applyHorizontalMovement()
   }
 
-  afterright () {
+  afterRight () {
     // nothing here yet
   }
 
