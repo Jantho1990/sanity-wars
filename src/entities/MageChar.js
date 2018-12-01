@@ -60,8 +60,9 @@ class MageChar extends PlayerChar {
     })
     
     this.name = "Mage"
-    this.hpCurrent = 10
-    this.hpTotal = 10
+
+    this.canMove = true
+    this.dying = false
 
     this.spellcaster = new SanityCaster(this, [
       {
@@ -81,6 +82,11 @@ class MageChar extends PlayerChar {
       manaTotal: 100,
       manaCurrent: 100
     })
+
+    this.hp = {
+      current: this.spellcaster.manaCurrent,
+      total: this.spellcaster.manaTotal
+    }
 
     this.buffs = new Container()
     
@@ -110,13 +116,27 @@ class MageChar extends PlayerChar {
     this.buffs.update(dt, t)
     this.updateGameData()
 
+    this.hp.current = this.spellcaster.manaCurrent
+
+    if (this.dying) {
+      this.anims.play('dying', 1)
+    } else if (this.hp.current === 0) {
+      this.die()
+    }
+
+    window.Debug.addLine('HP', this.hp.current)
+
     // hack to stop walk
-    if (this.vel.x === 0) {
+    if (!this.dying && this.vel.x === 0) {
       this.anims.play('stand')
     }
   }
 
   left () {
+    if (!this.canMove) {
+      return
+    }
+
     super.left()
 
     this.anims.play('walk')
@@ -127,6 +147,10 @@ class MageChar extends PlayerChar {
   }
 
   right () {
+    if (!this.canMove) {
+      return
+    }
+
     super.right()
 
     this.anims.play('walk')
@@ -137,6 +161,10 @@ class MageChar extends PlayerChar {
   }
 
   up () {
+    if (!this.canMove) {
+      return
+    }
+
     if (!this.falling) {
       sounds.jump.play()
     }
@@ -167,6 +195,20 @@ class MageChar extends PlayerChar {
 
   addBuff (buff) {
     this.buffs.add(buff)
+  }
+
+  hit (dmg) {
+    this.hp.current -= dmg
+
+    if (this.hp.current <= 0) {
+      this.die()
+    }
+  }
+
+  die () {
+    // this.anims.play('dying', 1)
+    this.canMove = false
+    this.dying = true
   }
 
   updateGameData () {
