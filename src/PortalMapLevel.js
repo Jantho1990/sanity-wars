@@ -1,7 +1,7 @@
 import tiledParser from '../titus/utils/tiledParser-1_2'
 import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
-import { rand, randOneFrom } from '../titus/utils/math'
+import { rand, randOneFrom, distance } from '../titus/utils/math'
 
 const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain.png")
 
@@ -19,12 +19,19 @@ class PortalMapLevel extends TileMap {
   }
 
   getSpawnLocations(data) {
+    const player = this.spawnPlayer()
+    const portals = [
+      this.spawnPortal(player),
+      this.spawnPortal(player)
+    ]
+
     return {
-      player: this.spawnPlayer()
+      player,
+      portals
     }
   }
 
-  spawnPlayer (player) {
+  spawnPlayer () {
     const { mapW, mapH } = this
     let found = false
     let x, y
@@ -41,15 +48,18 @@ class PortalMapLevel extends TileMap {
       [mapH - offset, mapH]
     ]
 
-    let tile
+    let tile, tileAbove, tileBelow
     while (!found) {
       x = rand(...randOneFrom(cornersX))
       y = rand(...randOneFrom(cornersY))
 
       tile = this.tileAtMapPos({ x, y })
-      const tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
 
-      if (tile.frame.walkable && !tileBelow.frame.walkable) {
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
         found = true
       }
     }
@@ -60,8 +70,34 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnPortal(portal) {
-    // nothing here yet
+  spawnPortal(player) {
+    const { mapW, mapH } = this
+    let found = false
+    let x, y
+
+    let tile, tileAbove, tileBelow, distanceToPlayer
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        distanceToPlayer = distance(tile.pos, player)
+        if (distanceToPlayer > 100) {
+          found = true
+        }
+      }
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
+    }
   }
 
   spawnExit(exit) {

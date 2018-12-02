@@ -11,6 +11,7 @@ import Debug from '../../titus/Debug';
 import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
 import { rand, randOneFrom } from '../../titus/utils/math'
+import Portal from '../entities/triggers/Portal';
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -36,7 +37,7 @@ class GameScreen extends Container {
 
     const tiledLoader = new TiledLoader(PortalMapManifest)
 
-    tiledLoader.levelLoad('Map Portal Test 2')
+    tiledLoader.levelLoad('Map Portal Test 1')
       .then((level => this.setupLevel(level, false)))
       .then(() => this.loaded = true)
   }
@@ -53,6 +54,19 @@ class GameScreen extends Container {
     // mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
     this.mageChar = camera.add(mageChar)
+
+    this.portals = camera.add(new Container())
+    map.spawns.portals.forEach(data => {
+      const { x, y } = data
+      const portal = this.portals.add(new Portal({
+        w: 32,
+        h: 32
+      }, () => {
+        console.log('hit')
+      }, true))
+      portal.pos.set(x, y)
+      console.log('Portal at', x, y)
+    })
 
     /* this.enemies = camera.add(new Container())
     map.spawns.enemies.forEach(data => {
@@ -124,7 +138,7 @@ class GameScreen extends Container {
 
   updatePlaying (dt) {
     // check bullet collision
-    const { bullets, enemies, player } = this
+    const { bullets, enemies, mageChar, portals } = this
 
     bullets.map(bullet => {
       if (enemies) {
@@ -136,6 +150,8 @@ class GameScreen extends Container {
         })
       }
     })
+
+    entity.hits(mageChar, portals, trigger => trigger.trigger())
   }
 }
 
