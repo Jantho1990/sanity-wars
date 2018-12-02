@@ -1,6 +1,7 @@
 import Trigger from './Trigger'
 import Texture from '../../../titus/Texture';
 import TileSprite from '../../../titus/TileSprite';
+import EventsHandler from '../../../titus/EventsHandler';
 
 const texture = new Texture('resources/entities/portals/portalRings1.png', (t, e) => {
   if (t.img.src.indexOf('data:image') === -1) {
@@ -32,13 +33,14 @@ const animations = {
 }
 
 class Portal extends TileSprite {
-  constructor (player) {
+  constructor (player, link) {
     super(texture, 32, 32)
 
     this.anims.add('swirl', animations.swirl, 0.0667)
     this.anims.play('swirl')
 
     this.player = player
+    this.link = link
   }
 
   onCollide () {
@@ -46,7 +48,7 @@ class Portal extends TileSprite {
 
     // if E key is being pressed
     if (keys.key(69)) {
-      debugger
+      EventsHandler.dispatch('changeLevel', this.link)
     }
   }
 }

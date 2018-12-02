@@ -18,7 +18,7 @@ class PortalMapLevel extends TileMap {
     this.data = data
   }
 
-  getSpawnLocations(data) {
+  getSpawnLocations (data) {
     const player = this.spawnPlayer()
     const portals = [
       this.spawnPortal(player),

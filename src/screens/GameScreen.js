@@ -57,6 +57,7 @@ class GameScreen extends Container {
       worldMap
     } = this
     const level = worldMap.level('Map Portal Test 2')
+    this.level = level
 
     const map = level.map
     this.map = camera.add(map)
@@ -69,10 +70,17 @@ class GameScreen extends Container {
     
     this.portals = camera.add(new Container())
     map.spawns.portals.forEach(data => {
-      const { x, y } = data
-      const portal = this.portals.add(new Portal(mageChar))
+      const { x, y, link } = data
+      const portal = this.portals.add(new Portal(mageChar, link))
       portal.pos.set(x, y)
       console.log('Portal at', x, y)
+    })
+    EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
+      const { camera, worldMap } = this
+      camera.remove(c => c.name === this.map.name)
+      const level = worldMap.level(levelName)
+      this.level = level
+      this.map = camera.add(level.map)
     })
     
     /* this.enemies = camera.add(new Container())
