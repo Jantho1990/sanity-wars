@@ -12,6 +12,7 @@ import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
 import { rand, randOneFrom } from '../../titus/utils/math'
 import Portal from '../entities/triggers/Portal';
+import WorldMap from '../WorldMap'
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -35,11 +36,62 @@ class GameScreen extends Container {
       h: game.h
     }))
 
-    const tiledLoader = new TiledLoader(PortalMapManifest)
+    /* const tiledLoader = new TiledLoader(PortalMapManifest)
 
-    tiledLoader.levelLoad('Map Portal Test 1')
+    tiledLoader.levelLoad('Map Portal Test 2')
       .then((level => this.setupLevel(level, false)))
-      .then(() => this.loaded = true)
+      .then(() => this.loaded = true) */
+    
+    this.worldMap = new WorldMap(PortalMapManifest)
+    this.worldMap.onDone(() => {
+      this.onWorldMapLoad()
+      this.loaded = true
+    })
+  }
+
+  onWorldMapLoad () {
+    const {
+      camera,
+      controls,
+      gameState,
+      worldMap
+    } = this
+    const level = worldMap.level('Map Portal Test 2')
+
+    const map = level.map
+    this.map = camera.add(map)
+
+    const mageChar = new MageChar(controls, map)
+    mageChar.pos.x = map.spawns.player.x
+    mageChar.pos.y = map.spawns.player.y
+    // mageChar.pos.copy(map.spawnPlayer(mageChar))
+    // debugger
+    
+    this.portals = camera.add(new Container())
+    map.spawns.portals.forEach(data => {
+      const { x, y } = data
+      const portal = this.portals.add(new Portal(mageChar))
+      portal.pos.set(x, y)
+      console.log('Portal at', x, y)
+    })
+    
+    /* this.enemies = camera.add(new Container())
+    map.spawns.enemies.forEach(data => {
+      const { type, x, y, properties = {} } = data
+      const enemy = this.enemies.add(this.makeEnemy(type))
+      enemy.pos.set(x, y)
+    }) */
+    
+    this.bullets = camera.add(new Container())
+    EventsHandler.listen('addBullet', bullet => {
+      this.bullets.add(bullet)
+    })
+    
+    // need to spawn player last so they appear above other graphics
+    this.mageChar = camera.add(mageChar)
+    
+    camera.worldSize = { w: map.w, h: map.h }
+    camera.setSubject(mageChar)
   }
 
   setupLevel (json, parsed) {
