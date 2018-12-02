@@ -32,15 +32,22 @@ const animations = {
 }
 
 class Portal extends TileSprite {
-  constructor (hitBox, onCollide, debug = false) {
+  constructor (player) {
     super(texture, 32, 32)
 
     this.anims.add('swirl', animations.swirl, 0.0667)
     this.anims.play('swirl')
+
+    this.player = player
   }
 
   onCollide () {
+    const { player: { controls: { keys } } } = this
 
+    // if E key is being pressed
+    if (keys.key(69)) {
+      debugger
+    }
   }
 }
 

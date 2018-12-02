@@ -58,12 +58,7 @@ class GameScreen extends Container {
     this.portals = camera.add(new Container())
     map.spawns.portals.forEach(data => {
       const { x, y } = data
-      const portal = this.portals.add(new Portal({
-        w: 32,
-        h: 32
-      }, () => {
-        console.log('hit')
-      }, true))
+      const portal = this.portals.add(new Portal(mageChar))
       portal.pos.set(x, y)
       console.log('Portal at', x, y)
     })
@@ -151,7 +146,7 @@ class GameScreen extends Container {
       }
     })
 
-    entity.hits(mageChar, portals, trigger => trigger.trigger())
+    entity.hits(mageChar, portals, portal => portal.onCollide())
   }
 }
 
