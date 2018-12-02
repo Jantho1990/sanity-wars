@@ -50,7 +50,7 @@ class GameScreen extends Container {
     const mageChar = new MageChar(controls, map)
     // mageChar.pos.x = map.spawns.player[0].x
     // mageChar.pos.y = map.spawns.player[0].y
-    mageChar.pos.copy(this.spawnPlayer(mageChar))
+    mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
     this.mageChar = camera.add(mageChar)
 
@@ -68,43 +68,6 @@ class GameScreen extends Container {
 
     camera.worldSize = { w: map.w, h: map.h }
     camera.setSubject(mageChar)
-  }
-
-  spawnPlayer (player) {
-    const { map, map: { mapW, mapH } } = this
-    let found = false
-    let x, y
-
-    // specify where the corners of the map are
-    const offset = 5 // offset in tiles
-    let cornersX = [
-      [0, offset],
-      [mapW - offset, mapW]
-    ]
-
-    const cornersY = [
-      [0, offset],
-      [mapH - offset, mapH]
-    ]
-
-    let tile
-    while (!found) {
-      x = rand(...randOneFrom(cornersX))
-      y = rand(...randOneFrom(cornersY))
-
-      tile = map.tileAtMapPos({ x, y })
-      const tileBelow = map.tileAtMapPos({ x, y: y + 1 })
-
-      if (tile.frame.walkable && !tileBelow.frame.walkable) {
-        // need to also check 
-        found = true
-      }
-    }
-
-    return {
-      x: tile.pos.x,
-      y: tile.pos.y
-    }
   }
 
   makeEnemy (type) {
