@@ -2,13 +2,13 @@ import Container from '../../titus/Container'
 import State from '../../titus/State'
 import states from '../states'
 import Camera from '../../titus/Camera'
-import TiledLevel from '../TiledLevel'
+import EnemyPlaygroundLevel from '../EnemyPlaygroundLevel'
 import TiledLoader from '../../titus/TiledLoader';
 import MageChar from '../entities/MageChar';
 import EnemyPlaygroundManifest from '../../resources/manifests/EnemyPlaygroundManifest'
 import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
-import Knight from '../entities/enemies/Knight';
+import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
 
 class GameScreen extends Container {
@@ -43,7 +43,7 @@ class GameScreen extends Container {
   setupLevel (json, parsed) {
     const { camera, controls, gameState } = this
 
-    const map = new TiledLevel(json, parsed)
+    const map = new EnemyPlaygroundLevel(json, parsed)
     this.map = camera.add(map)
 
     const mageChar = new MageChar(controls, map)
@@ -51,12 +51,12 @@ class GameScreen extends Container {
     mageChar.pos.y = map.spawns.player[0].y
     this.mageChar = camera.add(mageChar)
 
-    /* this.enemies = camera.add(new Container())
+    this.enemies = camera.add(new Container())
     map.spawns.enemies.forEach(data => {
       const { type, x, y, properties = {} } = data
       const enemy = this.enemies.add(this.makeEnemy(type))
       enemy.pos.set(x, y)
-    }) */
+    })
 
     this.bullets = camera.add(new Container())
     EventsHandler.listen('addBullet', bullet => {
@@ -70,8 +70,8 @@ class GameScreen extends Container {
   makeEnemy (type) {
     let enemy
     switch (type) {
-      case 'knight':
-        enemy = new Knight()
+      case 'eyeball':
+        enemy = new Eyeball(this.mageChar)
         break;
     }
     return enemy
