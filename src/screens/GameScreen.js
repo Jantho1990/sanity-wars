@@ -53,7 +53,6 @@ class GameScreen extends Container {
     mageChar.pos.y = map.spawns.player.y
     // mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
-    this.mageChar = camera.add(mageChar)
 
     this.portals = camera.add(new Container())
     map.spawns.portals.forEach(data => {
@@ -74,6 +73,9 @@ class GameScreen extends Container {
     EventsHandler.listen('addBullet', bullet => {
       this.bullets.add(bullet)
     })
+
+    // need to spawn player last so they appear above other graphics
+    this.mageChar = camera.add(mageChar)
 
     camera.worldSize = { w: map.w, h: map.h }
     camera.setSubject(mageChar)
