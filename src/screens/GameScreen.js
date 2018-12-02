@@ -36,7 +36,7 @@ class GameScreen extends Container {
 
     const tiledLoader = new TiledLoader(PortalMapManifest)
 
-    tiledLoader.levelLoad('Map Portal Test 1')
+    tiledLoader.levelLoad('Map Portal Test 2')
       .then((level => this.setupLevel(level, false)))
       .then(() => this.loaded = true)
   }
@@ -93,8 +93,10 @@ class GameScreen extends Container {
       y = rand(...randOneFrom(cornersY))
 
       tile = map.tileAtMapPos({ x, y })
+      const tileBelow = map.tileAtMapPos({ x, y: y + 1 })
 
-      if (tile.frame.walkable) {
+      if (tile.frame.walkable && !tileBelow.frame.walkable) {
+        // need to also check 
         found = true
       }
     }
