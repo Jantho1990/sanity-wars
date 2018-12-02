@@ -53,6 +53,18 @@ class PortalMapLevel extends TileMap {
       y: tile.pos.y
     }
   }
+
+  spawnPortal(portal) {
+    // nothing here yet
+  }
+
+  spawnExit(exit) {
+    // nothing here yet
+  }
+
+  spawnObjective(objective) {
+    // nothing here yet
+  }
 }
 
 export default PortalMapLevel
