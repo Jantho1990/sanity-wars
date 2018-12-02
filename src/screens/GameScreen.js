@@ -91,24 +91,18 @@ class GameScreen extends Container {
     while (!found) {
       x = rand(...randOneFrom(cornersX))
       y = rand(...randOneFrom(cornersY))
+
       tile = map.tileAtMapPos({ x, y })
-      if (!tile) {
-        debugger
-      }
+
       if (tile.frame.walkable) {
         found = true
       }
     }
-    const ret = map.mapToPixelPos({
-      x: tile.frame.x,
-      y: tile.frame.y
-    })
-    const coor = {
-      x: ret.x + entity.bounds(player).w,
-      y: ret.y + entity.bounds(player).h
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
     }
-    // debugger
-    return coor
   }
 
   makeEnemy (type) {
