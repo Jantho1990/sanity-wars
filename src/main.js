@@ -8,7 +8,7 @@ import KeyControls from '../titus/controls/KeyControls'
 import Overlay from './ui/Overlay';
 
 let width = window.innerWidth
-let height = window.innerHeight
+let height = window.innerHeight * 4/5
 
 const game = new Game(width, height)
 const controls = {
