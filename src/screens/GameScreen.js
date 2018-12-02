@@ -2,10 +2,10 @@ import Container from '../../titus/Container'
 import State from '../../titus/State'
 import states from '../states'
 import Camera from '../../titus/Camera'
-import EnemyPlaygroundLevel from '../EnemyPlaygroundLevel'
+import PortalMapLevel from '../PortalMapLevel'
 import TiledLoader from '../../titus/TiledLoader';
 import MageChar from '../entities/MageChar';
-import EnemyPlaygroundManifest from '../../resources/manifests/EnemyPlaygroundManifest'
+import PortalMapManifest from '../../resources/manifests/PortalMapManifest'
 import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
 import Eyeball from '../entities/enemies/Eyeball';
@@ -33,9 +33,9 @@ class GameScreen extends Container {
       h: game.h
     }))
 
-    const tiledLoader = new TiledLoader(EnemyPlaygroundManifest)
+    const tiledLoader = new TiledLoader(PortalMapManifest)
 
-    tiledLoader.levelLoad('Enemy Playground')
+    tiledLoader.levelLoad('Map Portal Test 1')
       .then((level => this.setupLevel(level, false)))
       .then(() => this.loaded = true)
   }
@@ -43,20 +43,20 @@ class GameScreen extends Container {
   setupLevel (json, parsed) {
     const { camera, controls, gameState } = this
 
-    const map = new EnemyPlaygroundLevel(json, parsed)
+    const map = new PortalMapLevel(json, parsed)
     this.map = camera.add(map)
 
     const mageChar = new MageChar(controls, map)
-    mageChar.pos.x = map.spawns.player[0].x
-    mageChar.pos.y = map.spawns.player[0].y
+    // mageChar.pos.x = map.spawns.player[0].x
+    // mageChar.pos.y = map.spawns.player[0].y
     this.mageChar = camera.add(mageChar)
 
-    this.enemies = camera.add(new Container())
+    /* this.enemies = camera.add(new Container())
     map.spawns.enemies.forEach(data => {
       const { type, x, y, properties = {} } = data
       const enemy = this.enemies.add(this.makeEnemy(type))
       enemy.pos.set(x, y)
-    })
+    }) */
 
     this.bullets = camera.add(new Container())
     EventsHandler.listen('addBullet', bullet => {
