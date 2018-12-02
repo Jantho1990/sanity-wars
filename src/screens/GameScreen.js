@@ -10,6 +10,7 @@ import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
 import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
+import { rand, randOneFrom } from '../../titus/utils/math'
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -49,6 +50,8 @@ class GameScreen extends Container {
     const mageChar = new MageChar(controls, map)
     // mageChar.pos.x = map.spawns.player[0].x
     // mageChar.pos.y = map.spawns.player[0].y
+    mageChar.pos.copy(this.spawnPlayer(mageChar))
+    // debugger
     this.mageChar = camera.add(mageChar)
 
     /* this.enemies = camera.add(new Container())
@@ -65,6 +68,47 @@ class GameScreen extends Container {
 
     camera.worldSize = { w: map.w, h: map.h }
     camera.setSubject(mageChar)
+  }
+
+  spawnPlayer (player) {
+    const { map, map: { mapW, mapH } } = this
+    let found = false
+    let x, y
+
+    // specify where the corners of the map are
+    const offset = 5 // offset in tiles
+    let cornersX = [
+      [0, offset],
+      [mapW - offset, mapW]
+    ]
+
+    const cornersY = [
+      [0, offset],
+      [mapH - offset, mapH]
+    ]
+
+    let tile
+    while (!found) {
+      x = rand(...randOneFrom(cornersX))
+      y = rand(...randOneFrom(cornersY))
+      tile = map.tileAtMapPos({ x, y })
+      if (!tile) {
+        debugger
+      }
+      if (tile.frame.walkable) {
+        found = true
+      }
+    }
+    const ret = map.mapToPixelPos({
+      x: tile.frame.x,
+      y: tile.frame.y
+    })
+    const coor = {
+      x: ret.x + entity.bounds(player).w,
+      y: ret.y + entity.bounds(player).h
+    }
+    // debugger
+    return coor
   }
 
   makeEnemy (type) {
