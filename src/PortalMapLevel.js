@@ -14,7 +14,14 @@ class PortalMapLevel extends TileMap {
     const { tileW, tileH, mapW, mapH, tiles } = data
     super(tiles, mapW, mapH, tileH, tileW, texture)
 
+    this.spawns = parsed ? data.spawns : this.getSpawnLocations(data)
     this.data = data
+  }
+
+  getSpawnLocations(data) {
+    return {
+      player: this.spawnPlayer()
+    }
   }
 
   spawnPlayer (player) {
@@ -43,7 +50,6 @@ class PortalMapLevel extends TileMap {
       const tileBelow = this.tileAtMapPos({ x, y: y + 1 })
 
       if (tile.frame.walkable && !tileBelow.frame.walkable) {
-        // need to also check 
         found = true
       }
     }

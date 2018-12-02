@@ -48,9 +48,9 @@ class GameScreen extends Container {
     this.map = camera.add(map)
 
     const mageChar = new MageChar(controls, map)
-    // mageChar.pos.x = map.spawns.player[0].x
-    // mageChar.pos.y = map.spawns.player[0].y
-    mageChar.pos.copy(map.spawnPlayer(mageChar))
+    mageChar.pos.x = map.spawns.player.x
+    mageChar.pos.y = map.spawns.player.y
+    // mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
     this.mageChar = camera.add(mageChar)
 
