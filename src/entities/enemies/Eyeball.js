@@ -123,6 +123,11 @@ class Eyeball extends TileSprite {
     pos.x += xo
     pos.y += yo
 
+    // Sanity Drain
+    if (distance < 100) {
+      target.spellcaster.manaCurrent -= 0.25
+    }
+
     // Bob a bit
     pos.y += Math.sin(t / 0.1) * 0.5
 

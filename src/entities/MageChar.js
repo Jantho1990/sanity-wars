@@ -128,7 +128,7 @@ class MageChar extends PlayerChar {
         this.hasDied = true
         this.dying = false
       }
-    } else if (this.hp.current === 0) {
+    } else if (this.hp.current <= 0) {
       this.die()
     }
 
