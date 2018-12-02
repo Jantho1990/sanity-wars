@@ -78,6 +78,7 @@ class Eyeball extends TileSprite {
     const { pos, frame, speed, target, waypoint, state } = this
 
     const angle = entity.angle(target, this)
+    window.Debug.addLine('Angle', angle)
     const distance = entity.distance(target, this)
     let xo = 0
     let yo = 0
@@ -125,11 +126,28 @@ class Eyeball extends TileSprite {
     // Bob a bit
     pos.y += Math.sin(t / 0.1) * 0.5
 
+    this.faceDirection(angle)
+
+    if (math.randOneIn(177)) {
+      this.anims.play('blink', 1)
+    }
+
+    if (this.anims.current === null) {
+      this.anims.play('fly')
+    }
+
     state.update(dt)
   }
 
-  faceDirection () {
-
+  faceDirection (angle) {
+    const rad = Math.PI / 2
+    if (Math.abs(angle) >= rad) {
+      this.anchor.x = 0
+      this.scale.x = 1
+    } else {
+      this.anchor.x = this.w
+      this.scale.x = -1
+    }
   }
 
   hit () {
