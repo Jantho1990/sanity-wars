@@ -75,10 +75,9 @@ class Eyeball extends TileSprite {
 
   update (dt, t) {
     super.update(dt, t)
-    const { pos, frame, speed, target, waypoint, state } = this
-
+    const { pos, frame, target, waypoint, state } = this
+    let { speed } = this
     const angle = entity.angle(target, this)
-    window.Debug.addLine('Angle', angle)
     const distance = entity.distance(target, this)
     let xo = 0
     let yo = 0
@@ -87,6 +86,7 @@ class Eyeball extends TileSprite {
 
     switch (this.state.get()) {
       case states.ATTACK:
+        speed *= 1.75
         xo = Math.cos(angle) * speed * dt
         yo = Math.sin(angle) * speed * dt
         if (distance < 60) {
