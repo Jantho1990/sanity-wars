@@ -69,6 +69,7 @@ class GameScreen extends Container {
     // debugger
     
     this.portals = camera.add(new Container())
+    this.portals.type = 'portals'
     map.spawns.portals.forEach(data => {
       const { x, y, link } = data
       const portal = this.portals.add(new Portal(mageChar, link))
@@ -78,10 +79,20 @@ class GameScreen extends Container {
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
+      camera.remove(c => c.type === 'portals')
       const level = worldMap.level(levelName)
+      const map = level.map
       this.level = level
       this.map = camera.add(level.map)
       mageChar.map = this.map
+      this.portals = camera.add(new Container())
+      this.portals.type = 'portals'
+      map.spawns.portals.forEach(data => {
+        const { x, y, link } = data
+        const portal = this.portals.add(new Portal(mageChar, link))
+        portal.pos.set(x, y)
+        console.log('Portal at', x, y)
+      })
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
