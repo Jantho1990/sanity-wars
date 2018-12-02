@@ -34,7 +34,6 @@ class Container {
    */
   remove (child) {
     this.children = this.children.filter(c => {
-      const t = typeof child
       return typeof child !== 'function'
         ? c !== child
         : !child(c)

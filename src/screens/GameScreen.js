@@ -76,11 +76,12 @@ class GameScreen extends Container {
       console.log('Portal at', x, y)
     })
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
-      const { camera, worldMap } = this
+      const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
       const level = worldMap.level(levelName)
       this.level = level
       this.map = camera.add(level.map)
+      mageChar.map = this.map
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
