@@ -11,99 +11,99 @@
  "tiles":[
         {
          "id":0,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":1,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":2,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":3,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":4,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":5,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":6,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":7,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":8,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":9,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":10,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":11,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":12,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":13,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":14,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":15,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":16,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":17,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":18,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":19,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":20,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":21,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":22,
-         "type":"enemy"
+         "type":"eyeball"
         }, 
         {
          "id":23,
-         "type":"enemy"
+         "type":"eyeball"
         }],
  "tilewidth":32,
  "type":"tileset",

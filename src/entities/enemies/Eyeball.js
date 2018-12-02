@@ -141,12 +141,23 @@ class Eyeball extends TileSprite {
 
   faceDirection (angle) {
     const rad = Math.PI / 2
+
+    // direction x
     if (Math.abs(angle) >= rad) {
       this.anchor.x = 0
       this.scale.x = 1
     } else {
       this.anchor.x = this.w
       this.scale.x = -1
+    }
+
+    // direction y
+    if (Math.sign(angle) < 0) {
+      this.anchor.y = 0
+      this.scale.y = 1
+    } else {
+      this.anchor.y = this.h
+      this.scale.y = -1
     }
   }
 
