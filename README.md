@@ -30,3 +30,17 @@ Credits:
 ###### Other Things
 - Engine: Titus (homebrew, based on the tutorial engine Pop from [HTML5 Games: Novice to Ninja](https://github.com/spbooks/html5games1)).
 - Graphics: All assets current open source.
+
+###### Unindexed art assets, need to credit
+https://opengameart.org/content/animated-sorcerer-witch
+https://opengameart.org/content/forest-monsters
+https://opengameart.org/content/hell-hound-character
+https://opengameart.org/content/fumiko-complete-charset
+https://opengameart.org/content/rpg-dread-knight-sheet
+https://opengameart.org/content/2d-sidescroller-skeletons
+https://opengameart.org/content/rpg-wizard-battle-frames
+https://opengameart.org/content/2dspritesidescroll
+https://opengameart.org/content/32x32-cc0-jrpg-ish-style
+https://opengameart.org/users/calciumtrice?page=1
+https://opengameart.org/content/2dprofilecreature
+https://opengameart.org/content/dark-emperor

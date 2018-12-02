@@ -4,7 +4,7 @@ import Texture from '../titus/Texture'
 
 const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain.png")
 
-class SpellcasterTestLevel extends TileMap {
+class EnemyPlaygroundLevel extends TileMap {
   constructor (data, parsed) {
     if (!parsed) {
       data = tiledParser(data)
@@ -21,10 +21,10 @@ class SpellcasterTestLevel extends TileMap {
     return {
       player: data.getObjectsByType('player', true),
       enemies: [
-        ...data.getObjectsByType('knight', true)
+        ...data.getObjectsByType('eyeball', true)
       ]
     }
   }
 }
 
-export default SpellcasterTestLevel
+export default EnemyPlaygroundLevel

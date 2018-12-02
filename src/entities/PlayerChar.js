@@ -63,10 +63,10 @@ class PlayerChar extends FrameSprite {
 
     // Flags to tell external systems when an action is being taken
     this.currentActions = {
-      UP: false,
-      DOWN: false,
-      LEFT: false,
-      RIGHT: false
+      up: false,
+      down: false,
+      left: false,
+      right: false
     }
 
     this.downActionCountdown = DROP_WAIT_TIME
@@ -105,23 +105,30 @@ class PlayerChar extends FrameSprite {
     // debugger
     const { controls, currentActions } = this
     Object.keys(actions).forEach((action) => {
+      let key = action[action]
       let isActive = false
       if (!Array.isArray(actions[action])) {
         isActive = controls.keys.key(actions[action])
       } else {
         for (let i = 0; i < actions[action].length; i++) {
-          isActive = isActive
-            ? isActive
-            : !!controls.keys.key(actions[action][i])
+          key = actions[action][i]
+          if (controls.keys.key(key)) {
+            isActive = true
+            break
+          }
         }
       }
 
       if (isActive) {
         // TODO: Clean the action syntax so we don't have to toLowerCase() everything
-        this[action]()
+        this[action](key)
+        this.currentActions[action] = true
       } else if (currentActions[action]) {
         this.currentActions[action] = false
-        this[`after${action}`]()
+        const afterAction = `after${action[0].toUpperCase() + action.substr(1)}`
+        if (this[afterAction]){
+          this[afterAction](key)
+        }
       }
     })
   }
@@ -134,7 +141,7 @@ class PlayerChar extends FrameSprite {
     this.jump()
   }
 
-  afterup () {
+  afterUp () {
     // nothing here yet
   }
 
@@ -147,7 +154,7 @@ class PlayerChar extends FrameSprite {
    *
    * @return void
    */
-  afterdown () {
+  afterDown () {
     // nothing here yet
   }
 
@@ -157,7 +164,7 @@ class PlayerChar extends FrameSprite {
     this.applyHorizontalMovement()
   }
 
-  afterleft () {
+  afterLeft () {
     // nothing here yet
   }
 
@@ -167,7 +174,7 @@ class PlayerChar extends FrameSprite {
     this.applyHorizontalMovement()
   }
 
-  afterright () {
+  afterRight () {
     // nothing here yet
   }
 

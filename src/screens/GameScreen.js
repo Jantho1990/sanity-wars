@@ -2,13 +2,13 @@ import Container from '../../titus/Container'
 import State from '../../titus/State'
 import states from '../states'
 import Camera from '../../titus/Camera'
-import SpellcasterTestLevel from '../SpellcasterTestLevel'
+import EnemyPlaygroundLevel from '../EnemyPlaygroundLevel'
 import TiledLoader from '../../titus/TiledLoader';
 import MageChar from '../entities/MageChar';
-import SpellcasterTestManifest from '../../resources/manifests/SpellcasterTestManifest'
+import EnemyPlaygroundManifest from '../../resources/manifests/EnemyPlaygroundManifest'
 import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
-import Knight from '../entities/enemies/Knight';
+import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
 
 class GameScreen extends Container {
@@ -33,9 +33,9 @@ class GameScreen extends Container {
       h: game.h
     }))
 
-    const tiledLoader = new TiledLoader(SpellcasterTestManifest)
+    const tiledLoader = new TiledLoader(EnemyPlaygroundManifest)
 
-    tiledLoader.levelLoad('Spellcaster Test')
+    tiledLoader.levelLoad('Enemy Playground')
       .then((level => this.setupLevel(level, false)))
       .then(() => this.loaded = true)
   }
@@ -43,7 +43,7 @@ class GameScreen extends Container {
   setupLevel (json, parsed) {
     const { camera, controls, gameState } = this
 
-    const map = new SpellcasterTestLevel(json, parsed)
+    const map = new EnemyPlaygroundLevel(json, parsed)
     this.map = camera.add(map)
 
     const mageChar = new MageChar(controls, map)
@@ -70,8 +70,8 @@ class GameScreen extends Container {
   makeEnemy (type) {
     let enemy
     switch (type) {
-      case 'knight':
-        enemy = new Knight()
+      case 'eyeball':
+        enemy = new Eyeball(this.mageChar)
         break;
     }
     return enemy
@@ -124,12 +124,14 @@ class GameScreen extends Container {
     const { bullets, enemies, player } = this
 
     bullets.map(bullet => {
-      enemies.map(enemy => {
-        if (entity.hit(enemy, bullet)) {
-          bullet.dead = true
-          enemy.hit(bullet.dmg)
-        }
-      })
+      if (enemies) {
+        enemies.map(enemy => {
+          if (entity.hit(enemy, bullet)) {
+            bullet.dead = true
+            enemy.hit(bullet.dmg)
+          }
+        })
+      }
     })
   }
 }

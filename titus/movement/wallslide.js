@@ -1,4 +1,5 @@
 import entity from '../utils/entity'
+import math from '../utils/math'
 
 /*
   Expects:
@@ -11,6 +12,59 @@ const TL = 0
 const TR = 1
 const BL = 2
 const BR = 3
+
+function checkCollisions (tiles) {
+  const collisions = tiles.map(t => map.getTileCollisions(t))
+    .filter(c => c !== null)
+
+  // If we hit a collision slope, calculate how much height needs to be added
+  // TODO: make this work without bouncing
+  collisions.forEach((collision, a) => {
+    // if we aren't moving, no need to calculate
+    if (xo < 1) {
+      // return
+    }
+
+    const slopes = collision.filter(o => o.name = 'slope')
+    slopes.forEach(slope => {
+      // get the correct point coordinates
+      const points = slope.polygon.map(p => {
+        return {
+          x: p.x + slope.x,
+          y: p.y + slope.y
+        }
+      })
+
+      // find the angled line
+      let line, m
+      for (let i = 0; i < points.length; i++) {
+        if (i !== 0) {
+          line = [points[i], points[i - 1]]
+        } else {
+          line = [points[i], points[points.length - 1]]
+        }
+
+        m = math.slope(...line)
+        if (m !== 0) {
+          break
+        }
+      }
+
+      const [pos] = line.filter(l => l.x === 0)
+      const xmov = (xo * ent.dir)
+      if (math.pointSlopeY(pos, m, xmov) > 0) {
+        // debugger
+      }
+      const offset = math.pointSlopeY(pos, m, xmov)
+      if (yo < 10 && ent.pos.y - offset <= tiles[a].pos.y + tiles[a].h - offset) {
+        // ent.pos.y -= offset
+        yo -= offset
+      }
+      window.Debug.addLine('yo slope', math.pointSlopeY(pos, m, xo))
+      // debugger
+    })
+  })
+}
 
 export default function wallslide(ent, map, x = 0, y = 0) {
   let tiles
@@ -72,6 +126,8 @@ export default function wallslide(ent, map, x = 0, y = 0) {
       xo = tileEdge - (bounds.x + bounds.w) // tile edge minus offset of entity bounds width
     }
   }
+
+  window.Debug.addLine('yo', yo)
 
   // xo and yo contain the amount we're allowed to move by
   return {

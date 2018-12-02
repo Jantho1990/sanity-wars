@@ -79,6 +79,24 @@ class TileMap extends Container {
       })
     )
   }
+
+  /**
+   * Return a tile's collision objects.
+   *
+   * @param {object} tile A tile object.
+   *
+   * @return {object|null}
+   */
+  getTileCollisions (tile) {
+    if (tile.frame.objects) {
+      let objects = tile.frame.objects.filter(object => object.type === 'collision')
+      if (objects.length > 0) {
+        return objects
+      }
+    }
+
+    return null
+  }
 }
 
 export default TileMap
