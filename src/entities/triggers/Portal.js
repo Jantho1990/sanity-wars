@@ -2,6 +2,8 @@ import Trigger from './Trigger'
 import Texture from '../../../titus/Texture';
 import TileSprite from '../../../titus/TileSprite';
 import EventsHandler from '../../../titus/EventsHandler';
+import {GameData} from '../../../titus/Game'
+import { PORTAL_WAIT_TIME } from '../../constants';
 
 const texture = new Texture('resources/entities/portals/portalRings1.png', (t, e) => {
   if (t.img.src.indexOf('data:image') === -1) {
@@ -47,7 +49,7 @@ class Portal extends TileSprite {
     const { player: { controls: { keys } } } = this
 
     // if E key is being pressed
-    if (keys.isBeingPressed(69)) {
+    if (keys.isBeingPressed(69) && GameData.get('portal_time_counter') <= 0) {
       EventsHandler.dispatch('changeLevel', this.link)
     }
   }

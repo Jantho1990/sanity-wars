@@ -13,6 +13,8 @@ import entity from '../../titus/utils/entity';
 import { rand, randOneFrom } from '../../titus/utils/math'
 import Portal from '../entities/triggers/Portal';
 import WorldMap from '../WorldMap'
+import { PORTAL_WAIT_TIME } from '../constants';
+import { GameData } from '../../titus/Game'
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -47,6 +49,9 @@ class GameScreen extends Container {
       this.onWorldMapLoad()
       this.loaded = true
     })
+
+    this.portalTimeCounter = 0
+    GameData.set('portal_time_counter', this.portalTimeCounter)
   }
 
   onWorldMapLoad () {
@@ -103,6 +108,8 @@ class GameScreen extends Container {
         y: ppos.y - 32 // offset of portal height
       })
 
+      this.portalTimeCounter = PORTAL_WAIT_TIME
+      GameData.set('portal_time_counter', this.portalTimeCounter)
     })
     
     /* this.enemies = camera.add(new Container())
@@ -194,6 +201,11 @@ class GameScreen extends Container {
     })
 
     entity.hits(mageChar, portals, portal => portal.onCollide())
+
+    if (this.portalTimeCounter > 0) {
+      this.portalTimeCounter -= dt
+      GameData.set('portal_time_counter', this.portalTimeCounter)
+    }
   }
 }
 
