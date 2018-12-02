@@ -40,23 +40,6 @@ class WorldMap {
     const map = new PortalMapLevel(json, parsed)
     level.map = map
     level.map.name = level.name
-
-    // set up portal links
-    /* map.spawns.portals.forEach((portal, i) => {
-      const { manifest } = this
-
-      const link = this.portalLinkCounter++ % Object.keys(manifest.levels).length
-
-      this.levelLinks.push({
-        link,
-        level: level.name
-      })
-      portal.link = {
-        link,
-        level: level.name
-      }
-      console.log(this.levelLinks)
-    }) */
   }
 
   linkPortals () {
@@ -79,13 +62,6 @@ class WorldMap {
         link: 1,
         level: nextLevel.name
       }
-
-      /* portals.forEach((portal, j) => {
-        const link = {
-          link: j,
-          level: 
-        }
-      }) */
     })
   }
 

@@ -81,6 +81,10 @@ class GameScreen extends Container {
       const level = worldMap.level(levelName)
       this.level = level
       this.map = camera.add(level.map)
+
+      // spawn the player on the newly loaded map, at the link
+      // to the portal they triggered in the previous map
+
     })
     
     /* this.enemies = camera.add(new Container())
@@ -115,6 +119,8 @@ class GameScreen extends Container {
   update (dt, t) {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER } = states
+
+    window.Debug.addLine('Camera Children', this.camera.children.length)
 
     switch (state.get()) {
       case LOADING:
