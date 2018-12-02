@@ -47,7 +47,7 @@ class Portal extends TileSprite {
     const { player: { controls: { keys } } } = this
 
     // if E key is being pressed
-    if (keys.key(69)) {
+    if (keys.isBeingPressed(69)) {
       EventsHandler.dispatch('changeLevel', this.link)
     }
   }

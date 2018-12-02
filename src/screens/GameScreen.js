@@ -96,6 +96,12 @@ class GameScreen extends Container {
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
+      const ppos = this.portals.children[link].pos
+      // debugger
+      mageChar.pos.copy({
+        x: ppos.x,
+        y: ppos.y - 32 // offset of portal height
+      })
 
     })
     
