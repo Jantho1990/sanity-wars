@@ -76,6 +76,7 @@ export default function wallslide(ent, map, x = 0, y = 0) {
     }
 
     // If we hit a collision slope, calculate how much height needs to be added
+    // TODO: make this work without bouncing
     collisions.forEach((collision, a) => {
       // if we aren't moving, no need to calculate
       if (xo < 1) {

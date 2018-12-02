@@ -10,12 +10,12 @@ import Overlay from './ui/Overlay';
 let width = window.innerWidth
 let height = window.innerHeight
 
-const game = new Game(600, 400)
+const game = new Game(width, height)
 const controls = {
   keys: new KeyControls()
 }
 
-const overlay = new Overlay(600, 400)
+const overlay = new Overlay(width, height)
 game.setUserInterface(overlay)
 
 const defaults = () => ({

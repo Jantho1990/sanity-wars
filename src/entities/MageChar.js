@@ -112,6 +112,9 @@ class MageChar extends PlayerChar {
   }
 
   update (dt, t) {
+    if (this.hasDied) {
+      return
+    }
     super.update(dt, t)
     this.spellcaster.update(dt, t)
     this.buffs.update(dt, t)
