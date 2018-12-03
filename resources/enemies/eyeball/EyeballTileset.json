@@ -1,5 +1,5 @@
 { "columns":8,
- "image":"eyeball spritesheet.png",
+ "image":"./eyeball_spritesheet.png",
  "imageheight":96,
  "imagewidth":256,
  "margin":0,

@@ -25,6 +25,7 @@ class WorldMap {
     const { levels } = manifest
 
     levels.forEach((level, i) => {
+      
       this.levels[i] = {
         name: level.name
       }
@@ -32,6 +33,7 @@ class WorldMap {
       levelLoader.levelLoad(level.name)
         .then(data => this.setupLevel(this.levels[i], data))
         .then(() => {
+          
           if (--this.progress === 0) {
             this.seedFinalExitRandomArray()
             this.linkPortals()
@@ -47,7 +49,7 @@ class WorldMap {
     const map = new PortalMapLevel(json, parsed)
     level.map = map
     level.map.name = level.name
-
+    
     
   }
 

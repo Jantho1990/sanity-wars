@@ -78,7 +78,7 @@ class MageChar extends PlayerChar {
       ['slap', animations.slap, 0.0667],
       ['bow', animations.bow, 0.0667],
       ['dying', animations.dying, 0.0667],
-      ['walk', animations.walk, 0.0667]
+      ['walk', animations.walk, 0.0467]
     ])
 
     this.anims.play('stand')

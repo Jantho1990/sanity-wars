@@ -1,0 +1,14 @@
+{ "columns":16,
+ "image":"castle_tileset_part1.png",
+ "imageheight":1344,
+ "imagewidth":512,
+ "margin":0,
+ "name":"castle-2",
+ "spacing":0,
+ "tilecount":672,
+ "tiledversion":"1.2.1",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":1.2
+}
