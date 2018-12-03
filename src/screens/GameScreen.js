@@ -138,7 +138,17 @@ class GameScreen extends Container {
     this.enemies.type = 'enemies'
 
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
-      const { camera, worldMap, mageChar } = this
+      this.state.set(states.UPDATING)
+      const { camera, enemies, worldMap, mageChar } = this
+
+      // Save spawns of enemies before unloading them
+      this.map.spawns.enemies = []
+      enemies.children.forEach(enemy => this.map.spawns.enemies.push({
+        x: enemy.pos.x,
+        y: enemy.pos.y,
+        type: enemy.type || null
+      }))
+
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
       camera.remove(c => c.type === 'pickups')
@@ -150,6 +160,7 @@ class GameScreen extends Container {
 
       const map = level.map
       this.map = camera.add(map)
+      // debugger
       
       mageChar.map = this.map
 
@@ -185,6 +196,9 @@ class GameScreen extends Container {
       map.spawns.enemies.forEach(data => {
         const { type, x, y, properties = {} } = data
         const enemy = this.enemies.add(this.makeEnemy(type))
+        if (enemy === undefined) {
+          debugger
+        }
         enemy.pos.set(x, y)
         if (enemy.type === 'eyeball') {
           this.eyeballsCounter++
@@ -207,6 +221,8 @@ class GameScreen extends Container {
 
       this.portalTimeCounter = PORTAL_WAIT_TIME
       GameData.set('portal_time_counter', this.portalTimeCounter)
+
+      this.state.set(states.PLAYING)
     })
     
     /* this.enemies = camera.add(new Container())
@@ -233,7 +249,9 @@ class GameScreen extends Container {
     switch (type) {
       case 'eyeball':
         enemy = new Eyeball(this.mageChar)
-        break;
+        break
+      default:
+        // throw new Error(`Unknown enemy type (${type}).`)
     }
     return enemy
   }
@@ -251,7 +269,7 @@ class GameScreen extends Container {
 
   update (dt, t) {
     const { state } = this
-    const { LOADING, READY, PLAYING, GAMEOVER } = states
+    const { LOADING, READY, PLAYING, GAMEOVER, UPDATING } = states
 
     window.Debug.addLine('Camera Children', this.camera.children.length)
 
@@ -277,6 +295,9 @@ class GameScreen extends Container {
       case PLAYING:
         super.update(dt, t)
         this.updatePlaying(dt)
+        break
+      case UPDATING:
+        // don't run anything
         break
       case GAMEOVER:
         if (state.first) {
