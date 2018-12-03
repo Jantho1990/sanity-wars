@@ -98,7 +98,7 @@ class PortalMapLevel extends TileMap {
           tileAbove.frame.walkable &&
           !tileBelow.frame.walkable) {
         distanceToPlayer = distance(tile.pos, player)
-        if (distanceToPlayer > 100) {
+        if (distanceToPlayer > 300) {
           found = true
         }
       }
@@ -131,7 +131,7 @@ class PortalMapLevel extends TileMap {
         for (let i = 0; i < avoid.length; i++) {
           const target = avoid[i]
           distanceToTarget = distance(tile.pos, target)
-          if (distanceToTarget <= 100) {
+          if (distanceToTarget <= 300) {
             valid = false
             break
           }
