@@ -17,6 +17,7 @@ import { PORTAL_WAIT_TIME } from '../constants';
 import { GameData } from '../../titus/Game'
 import FinalExit from '../entities/triggers/FinalExit';
 import TestEndScreen from './TestEndScreen';
+import TomePickup from '../entities/pickups/TomePickup';
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -88,6 +89,15 @@ class GameScreen extends Container {
     mageChar.pos.y = map.spawns.player.y
     // mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
+
+    this.pickups = camera.add(new Container())
+    this.pickups.type = 'pickups'
+    map.spawns.pickups.forEach(data => {
+      const { x, y } = data
+      const pickup = this.pickups.add(new TomePickup())
+      pickup.pos.set(x, y)
+      console.log('Pickup at', x, y)
+    })
     
     this.portals = camera.add(new Container())
     this.portals.type = 'portals'
@@ -108,6 +118,7 @@ class GameScreen extends Container {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
+      camera.remove(c => c.type === 'pickups')
 
       const level = worldMap.level(levelName)
       this.level = level
@@ -116,6 +127,15 @@ class GameScreen extends Container {
       this.map = camera.add(map)
       
       mageChar.map = this.map
+
+      this.pickups = camera.add(new Container())
+      this.pickups.type = 'pickups'
+      map.spawns.pickups.forEach(data => {
+        const { x, y } = data
+        const pickup = this.pickups.add(new TomePickup())
+        pickup.pos.set(x, y)
+        console.log('Pickup at', x, y)
+      })
 
       this.portals = camera.add(new Container())
       this.portals.type = 'portals'

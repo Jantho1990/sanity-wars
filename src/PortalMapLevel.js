@@ -31,7 +31,9 @@ class PortalMapLevel extends TileMap {
 
     return {
       player,
-      pickup,
+      pickups: [
+        pickup
+      ],
       portals: [
         portal1,
         portal2
