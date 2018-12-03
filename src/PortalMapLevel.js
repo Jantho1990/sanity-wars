@@ -20,19 +20,20 @@ class PortalMapLevel extends TileMap {
 
   getSpawnLocations (data) {
     const player = this.spawnPlayer()
-    const portals = [
-      this.spawnPortal(player),
-      this.spawnPortal(player)
-    ]
+    let portal1 = this.spawnPortal(player)
+    let portal2 = this.spawnPortal(player, portal1)
 
     // hackish way to keep portals from spawning on top of each other
-    while (this.spawnedInSameLocation(portals[0], portals[1])) {
-      portals[0] = this.spawnPortal(player)
+    while (this.spawnedInSameLocation(portal1, portal2)) {
+      portal1 = this.spawnPortal(player, portal2)
     }
 
     return {
       player,
-      portals
+      portals: [
+        portal1,
+        portal2
+      ]
     }
   }
 
@@ -80,12 +81,12 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnPortal (player) {
+  spawnPortal (...avoid) {
     const { mapW, mapH } = this
     let found = false
     let x, y
 
-    let tile, tileAbove, tileBelow, distanceToPlayer
+    let tile, tileAbove, tileBelow, distanceToTarget
     while (!found) {
       x = rand(mapW)
       y = rand(mapH)
@@ -97,8 +98,14 @@ class PortalMapLevel extends TileMap {
       if (tile.frame.walkable &&
           tileAbove.frame.walkable &&
           !tileBelow.frame.walkable) {
-        distanceToPlayer = distance(tile.pos, player)
-        if (distanceToPlayer > 300) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
+            break
+          }
+        }
+        if (valid) {
           found = true
         }
       }
