@@ -105,7 +105,7 @@ class WorldMap {
         link: 1,
         level: nextLevel.name
       }
-      console.log(portals, level.name)
+      // console.log(portals, level.name)
     })
   }
 

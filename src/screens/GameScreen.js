@@ -55,6 +55,8 @@ class GameScreen extends Container {
     this.portalTimeCounter = 0
     GameData.set('portal_time_counter', this.portalTimeCounter)
 
+    this.pickupsCounter = 0
+
     this.setEndGame()
   }
 
@@ -93,7 +95,7 @@ class GameScreen extends Container {
       const { x, y, link } = data
       const portal = this.portals.add(new Portal(mageChar, link))
       portal.pos.set(x, y)
-      console.log('Portal at', x, y)
+      // console.log('Portal at', x, y)
     })
 
     if (map.spawns.finalExit) {
@@ -121,7 +123,7 @@ class GameScreen extends Container {
         const { x, y, link } = data
         const portal = this.portals.add(new Portal(mageChar, link))
         portal.pos.set(x, y)
-        console.log('Portal at', x, y)
+        // console.log('Portal at', x, y)
       })
 
       if (map.spawns.finalExit) {
