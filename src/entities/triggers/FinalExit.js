@@ -1,5 +1,6 @@
 import TileSprite from '../../../titus/TileSprite'
 import Texture from '../../../titus/Texture';
+import EventsHandler from '../../../titus/EventsHandler';
 
 const texture = new Texture('/resources/entities/portals/portalRings2.png')
 
@@ -28,7 +29,7 @@ class FinalExit extends TileSprite {
 
     // if E key is being pressed
     if (keys.isBeingPressed(69)) {
-      debugger
+      EventsHandler.dispatch('finalExit')
     }
   }
 }
