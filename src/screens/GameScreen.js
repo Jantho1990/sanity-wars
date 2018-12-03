@@ -223,8 +223,8 @@ class GameScreen extends Container {
     pickup.dead = true
 
     // remove pickup from level to prevent it reappearing on level change
-    const { pickups } = this.worldMap.level(this.level.name).map.spawns
-    this.worldMap.level(this.level.name).map.spawns.pickups = pickups.filter(p => p.x !== pickup.pos.x && p.y !== pickup.pos.y)
+    const { pickups } = this.map.spawns
+    this.map.spawns.pickups = pickups.filter(p => p.x !== pickup.pos.x && p.y !== pickup.pos.y)
 
     GameData.set('pickups', this.pickupsCounter)
   }
