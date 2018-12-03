@@ -63,7 +63,12 @@ class GameScreen extends Container {
 
     // not sure if this should go here, but we'll work with it for now
     this.eyeballsCounter = 0
+    this.eyeballSpawnRate = 0.33
+    this.eyeballSpawnCounter = 0
     this.eyeballsMax = 3
+    this.eyeballsMaxRate = 10
+    this.eyeballsMaxRateCounter = 0
+    this.eyeballsMaxHardLimit = 7
 
     this.setEndGame()
   }
@@ -226,13 +231,6 @@ class GameScreen extends Container {
       this.state.set(states.PLAYING)
     })
     
-    /* this.enemies = camera.add(new Container())
-    map.spawns.enemies.forEach(data => {
-      const { type, x, y, properties = {} } = data
-      const enemy = this.enemies.add(this.makeEnemy(type))
-      enemy.pos.set(x, y)
-    }) */
-    
     this.bullets = camera.add(new Container())
     EventsHandler.listen('addBullet', bullet => {
       this.bullets.add(bullet)
@@ -315,16 +313,39 @@ class GameScreen extends Container {
     state.update(dt)
   }
 
-  updatePlaying (dt) {
+  updatePlaying (dt, t) {
     // check bullet collision
-    const { bullets, enemies, eyeballsCounter, eyeballsMax, map, mageChar, pickups, portals } = this
+    const {
+      bullets,
+      enemies,
+      eyeballsCounter,
+      eyeballsMax,
+      eyeballsMaxHardLimit,
+      eyeballsMaxRate,
+      eyeballSpawnRate,
+      map,
+      mageChar,
+      pickups,
+      portals
+    } = this
 
-    if (eyeballsCounter < eyeballsMax) {
+    if (
+      eyeballsCounter < eyeballsMaxHardLimit &&
+      eyeballsCounter < eyeballsMax &&
+      (this.eyeballSpawnCounter += dt) / eyeballSpawnRate > 1
+    ) {
       const eyeball = this.makeEnemy('eyeball')
       eyeball.pos.copy(map.spawnEntity(eyeball, { offMap: true }, mageChar, ...this.enemies.children))
       this.enemies.add(eyeball)
       this.eyeballsCounter++
-      console.log('Enemy spawned at', eyeball.pos.x, eyeball.pos.y)
+      // console.log('Enemy spawned at', eyeball.pos.x, eyeball.pos.y)
+      this.eyeballSpawnCounter = 0
+    }
+
+    // make the game harder by adding more eyeballs as time passes by
+    if ((this.eyeballsMaxRateCounter += dt) / eyeballsMaxRate > 1) {
+      this.eyeballsMax++
+      this.eyeballsMaxRateCounter -= eyeballsMaxRate
     }
 
     bullets.map(bullet => {
