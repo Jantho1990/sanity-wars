@@ -231,7 +231,7 @@ class GameScreen extends Container {
     bullets.map(bullet => {
       if (enemies) {
         enemies.map(enemy => {
-          if (entity.hit(enemy, bullet)) {
+          if (!bullet.dead && entity.hit(enemy, bullet)) {
             bullet.dead = true
             enemy.hit(bullet.dmg)
           }
