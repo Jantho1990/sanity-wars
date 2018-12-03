@@ -321,9 +321,10 @@ class GameScreen extends Container {
 
     if (eyeballsCounter < eyeballsMax) {
       const eyeball = this.makeEnemy('eyeball')
-      eyeball.pos.copy(map.spawnEntity(eyeball, {}, mageChar, ...this.enemies.children))
+      eyeball.pos.copy(map.spawnEntity(eyeball, { offMap: true }, mageChar, ...this.enemies.children))
       this.enemies.add(eyeball)
       this.eyeballsCounter++
+      console.log('Enemy spawned at', eyeball.pos.x, eyeball.pos.y)
     }
 
     bullets.map(bullet => {
