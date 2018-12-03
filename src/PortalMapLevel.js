@@ -46,7 +46,7 @@ class PortalMapLevel extends TileMap {
     let found = false
     let x, y
 
-    // specify where the corners of the this are
+    // specify where the corners of the map are
     const offset = 5 // offset in tiles
     let cornersX = [
       [0, offset],
@@ -131,13 +131,13 @@ class PortalMapLevel extends TileMap {
         for (let i = 0; i < avoid.length; i++) {
           const target = avoid[i]
           distanceToTarget = distance(tile.pos, target)
-          if (distanceToTarget <= 300) {
+          if (distanceToTarget <= 100) {
             valid = false
             break
           }
-          if (valid) {
-            found = true
-          }
+        }
+        if (valid) {
+          found = true
         }
       }
     }
@@ -148,8 +148,46 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnObjective (objective) {
-    // nothing here yet
+  spawnPickup (...avoid) {
+    const { mapW, mapH } = this
+    let found = false
+    let x, y
+
+    let tile, tileAbove, tileBelow, distanceToTarget
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          const target = avoid[i]
+          distanceToTarget = distance(tile.pos, target)
+          if (distanceToTarget <= 300) {
+            valid = false
+            break
+          }
+        }
+        if (valid) {
+          found = true
+        }
+      }
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
+    }
+  }
+
+  isFarEnoughAway (ent1, ent2) {
+
   }
 
   setFinalExitSpawn () {
