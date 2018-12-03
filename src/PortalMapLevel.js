@@ -20,16 +20,18 @@ class PortalMapLevel extends TileMap {
 
   getSpawnLocations (data) {
     const player = this.spawnPlayer()
-    let portal1 = this.spawnPortal(player)
-    let portal2 = this.spawnPortal(player, portal1)
+    let pickup = this.spawnPickup(player)
+    let portal1 = this.spawnPortal(player, pickup)
+    let portal2 = this.spawnPortal(player, pickup, portal1)
 
     // hackish way to keep portals from spawning on top of each other
     while (this.spawnedInSameLocation(portal1, portal2)) {
-      portal1 = this.spawnPortal(player, portal2)
+      portal1 = this.spawnPortal(player, pickup, portal2)
     }
 
     return {
       player,
+      pickup,
       portals: [
         portal1,
         portal2
