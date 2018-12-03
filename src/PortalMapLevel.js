@@ -154,7 +154,26 @@ class PortalMapLevel extends TileMap {
 
   setFinalExitSpawn () {
     const { player, portals } = this.spawns
-    this.spawns.finalExit = this.spawnFinalExit(player, ...portals)
+    const otherSpawns = [player, ...portals]
+    let finalSpawn = this.spawnFinalExit(...otherSpawns)
+
+    // brute force check to prevent overlaps
+    let validSpawn = false
+    while (!validSpawn) {
+      let valid = true
+      otherSpawns.forEach(otherSpawn => {
+        if (!valid) return
+        if (this.spawnedInSameLocation(finalSpawn, otherSpawn)) {
+          finalSpawn = this.spawnFinalExit(...otherSpawns)
+          valid = false
+        }
+      })
+      if (valid) {
+        validSpawn = true
+      }
+    }
+
+    this.spawns.finalExit = finalSpawn
   }
 }
 
