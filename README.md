@@ -45,3 +45,4 @@ https://opengameart.org/users/calciumtrice?page=1
 https://opengameart.org/content/2dprofilecreature
 https://opengameart.org/content/dark-emperor
 https://opengameart.org/content/portals
+https://opengameart.org/content/roguelikerpg-items

@@ -1,7 +1,7 @@
 {
-  "name": "DropDown",
+  "name": "Sanity Wars",
   "version": "0.0.1",
-  "description": "Gamedev experiments",
+  "description": "Ludum Dare 43",
   "main": "game.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
