@@ -13,7 +13,8 @@ const texture = new Texture('resources/characters/mage/Fumiko.png', (t, e) => {
 })
 
 const sounds = {
-  jump: new SoundPool('resources/sounds/jump.wav')
+  jump: new SoundPool('resources/sounds/jump.wav'),
+  death: new SoundPool('resources/sounds/MageScream.mp3')
 }
 
 
@@ -192,6 +193,7 @@ class MageChar extends PlayerChar {
     // this.anims.play('dying', 1)
     this.canMove = false
     this.dying = true
+    sounds.death.play()
   }
 
   updateGameData () {
