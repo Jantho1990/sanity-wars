@@ -2,7 +2,7 @@ import TiledLoader from "../titus/TiledLoader";
 import PortalMapLevel from "./PortalMapLevel";
 import math from '../titus/utils/math'
 
-const finalExitRandomArray = []
+let finalExitRandomArray = []
 
 /**
  * Manager for loading multiple connected level-maps.
@@ -62,6 +62,7 @@ class WorldMap {
 
   seedFinalExitRandomArray () {
     const { levels } = this
+    finalExitRandomArray = [] // quick fix to reset the randomness on game restart
     let seeded = false
     levels.forEach((l, i) => {
       let v = 0
