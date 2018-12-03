@@ -20,23 +20,42 @@ class PortalMapLevel extends TileMap {
 
   getSpawnLocations (data) {
     const player = this.spawnPlayer()
-    const portals = [
-      this.spawnPortal(player),
-      this.spawnPortal(player)
-    ]
+    let pickup = this.spawnPickup(player)
+    let portal1 = this.spawnPortal(player, pickup)
+    let portal2 = this.spawnPortal(player, pickup, portal1)
 
     // hackish way to keep portals from spawning on top of each other
-    while (this.spawnedInSameLocation(portals[0], portals[1])) {
-      portals[0] = this.spawnPortal(player)
+    while (this.spawnedInSameLocation(portal1, portal2)) {
+      portal1 = this.spawnPortal(player, pickup, portal2)
     }
 
     return {
       player,
-      portals
+      pickups: [
+        this.pickupOffset(pickup)
+      ],
+      portals: [
+        portal1,
+        portal2
+      ]
     }
   }
 
-  spawnedInSameLocation(ent1, ent2) {
+  /**
+   * Hack to center a 16x16 sprite over a 32x32 tile.
+   *
+   * @param {object} ent A cartesian coordinate.
+   *
+   * @return {object}
+   */
+  pickupOffset (ent) {
+    return {
+      x: ent.x + (this.tileW / 4),
+      y: ent.y
+    }
+  }
+
+  spawnedInSameLocation (ent1, ent2) {
     return ent1.x === ent2.x &&
            ent1.y === ent2.y
   }
@@ -46,7 +65,7 @@ class PortalMapLevel extends TileMap {
     let found = false
     let x, y
 
-    // specify where the corners of the this are
+    // specify where the corners of the map are
     const offset = 5 // offset in tiles
     let cornersX = [
       [0, offset],
@@ -80,12 +99,12 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnPortal(player) {
+  spawnPortal (...avoid) {
     const { mapW, mapH } = this
     let found = false
     let x, y
 
-    let tile, tileAbove, tileBelow, distanceToPlayer
+    let tile, tileAbove, tileBelow, distanceToTarget
     while (!found) {
       x = rand(mapW)
       y = rand(mapH)
@@ -97,8 +116,14 @@ class PortalMapLevel extends TileMap {
       if (tile.frame.walkable &&
           tileAbove.frame.walkable &&
           !tileBelow.frame.walkable) {
-        distanceToPlayer = distance(tile.pos, player)
-        if (distanceToPlayer > 100) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
+            break
+          }
+        }
+        if (valid) {
           found = true
         }
       }
@@ -110,12 +135,108 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnExit(exit) {
-    // nothing here yet
+  spawnFinalExit (...avoid) {
+    const { mapW, mapH } = this
+    let found = false
+    let x, y
+
+    let tile, tileAbove, tileBelow, distanceToTarget
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
+            break
+          }
+        }
+        if (valid) {
+          found = true
+        }
+      }
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
+    }
   }
 
-  spawnObjective(objective) {
-    // nothing here yet
+  spawnPickup (...avoid) {
+    const { mapW, mapH } = this
+    let found = false
+    let x, y
+
+    let tile, tileAbove, tileBelow, distanceToTarget
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
+            break
+          }
+        }
+        if (valid) {
+          found = true
+        }
+      }
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
+    }
+  }
+
+  isFarEnoughAway (ent1, ent2, threshold = 100) {
+    const distanceToTarget = distance(ent1, ent2)
+    if (distanceToTarget <= threshold) {
+      return false
+    }
+    return true
+  }
+
+  setFinalExitSpawn () {
+    const { player, portals } = this.spawns
+    const otherSpawns = [player, ...portals]
+    let finalSpawn = this.spawnFinalExit(...otherSpawns)
+
+    // brute force check to prevent overlaps
+    let validSpawn = false
+    while (!validSpawn) {
+      let valid = true
+      otherSpawns.forEach(otherSpawn => {
+        if (!valid) return
+        if (this.spawnedInSameLocation(finalSpawn, otherSpawn)) {
+          finalSpawn = this.spawnFinalExit(...otherSpawns)
+          valid = false
+        }
+      })
+      if (valid) {
+        validSpawn = true
+      }
+    }
+
+    this.spawns.finalExit = finalSpawn
   }
 }
 

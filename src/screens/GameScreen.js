@@ -15,6 +15,11 @@ import Portal from '../entities/triggers/Portal';
 import WorldMap from '../WorldMap'
 import { PORTAL_WAIT_TIME } from '../constants';
 import { GameData } from '../../titus/Game'
+import FinalExit from '../entities/triggers/FinalExit';
+import TestEndScreen from './TestEndScreen';
+import TomePickup from '../entities/pickups/TomePickup';
+import TestEndPartialGoodScreen from './TestEndPartialGoodScreen';
+import TestEndGoodScreen from './TestEndGoodScreen';
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -52,6 +57,34 @@ class GameScreen extends Container {
 
     this.portalTimeCounter = 0
     GameData.set('portal_time_counter', this.portalTimeCounter)
+
+    this.pickupsCounter = 0
+    GameData.set('pickups', this.pickupsCounter)
+
+    this.setEndGame()
+  }
+
+  setEndGame () {
+    EventsHandler.listen('finalExit', () => {
+      // Game restart callback
+      const callback = () => {
+        this.game.setScene(
+          new GameScreen(this.game, this.controls, {})
+        )
+      }
+
+      // Set screen based on number of pickups collected
+      let screen
+      if (this.pickupsCounter === this.worldMap.levels.length) {
+        screen = new TestEndGoodScreen(this.game, this.controls, callback)
+      } else if (this.pickupsCounter > 0) {
+        screen = new TestEndPartialGoodScreen(this.game, this.controls, callback)
+      } else {
+        screen = new TestEndScreen(this.game, this.controls, callback)
+      }
+
+      this.game.setScene(screen)
+    })
   }
 
   onWorldMapLoad () {
@@ -72,6 +105,15 @@ class GameScreen extends Container {
     mageChar.pos.y = map.spawns.player.y
     // mageChar.pos.copy(map.spawnPlayer(mageChar))
     // debugger
+
+    this.pickups = camera.add(new Container())
+    this.pickups.type = 'pickups'
+    map.spawns.pickups.forEach(data => {
+      const { x, y } = data
+      const pickup = this.pickups.add(new TomePickup())
+      pickup.pos.set(x, y)
+      // console.log('Pickup at', x, y)
+    })
     
     this.portals = camera.add(new Container())
     this.portals.type = 'portals'
@@ -79,12 +121,20 @@ class GameScreen extends Container {
       const { x, y, link } = data
       const portal = this.portals.add(new Portal(mageChar, link))
       portal.pos.set(x, y)
-      console.log('Portal at', x, y)
+      // console.log('Portal at', x, y)
     })
+
+    if (map.spawns.finalExit) {
+      this.finalExit = camera.add(new FinalExit(mageChar))
+      this.finalExit.pos.copy(map.spawns.finalExit)
+      this.finalExit.name = 'Final Exit'
+    }
+
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
+      camera.remove(c => c.type === 'pickups')
 
       const level = worldMap.level(levelName)
       this.level = level
@@ -94,14 +144,32 @@ class GameScreen extends Container {
       
       mageChar.map = this.map
 
+      this.pickups = camera.add(new Container())
+      this.pickups.type = 'pickups'
+      map.spawns.pickups.forEach(data => {
+        const { x, y } = data
+        const pickup = this.pickups.add(new TomePickup())
+        pickup.pos.set(x, y)
+        // console.log('Pickup at', x, y)
+      })
+
       this.portals = camera.add(new Container())
       this.portals.type = 'portals'
       map.spawns.portals.forEach(data => {
         const { x, y, link } = data
         const portal = this.portals.add(new Portal(mageChar, link))
         portal.pos.set(x, y)
-        console.log('Portal at', x, y)
+        // console.log('Portal at', x, y)
       })
+
+      if (map.spawns.finalExit) {
+        this.finalExit = camera.add(new FinalExit(mageChar))
+        this.finalExit.pos.copy(map.spawns.finalExit)
+        this.finalExit.name = 'Final Exit'
+      } else if (this.finalExit) {
+        camera.remove(c => c.name === 'Final Exit')
+        delete this.finalExit
+      }
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
@@ -150,6 +218,17 @@ class GameScreen extends Container {
     return enemy
   }
 
+  collectPickup (pickup) {
+    this.pickupsCounter++
+    pickup.dead = true
+
+    // remove pickup from level to prevent it reappearing on level change
+    const { pickups } = this.map.spawns
+    this.map.spawns.pickups = pickups.filter(p => p.x !== pickup.pos.x && p.y !== pickup.pos.y)
+
+    GameData.set('pickups', this.pickupsCounter)
+  }
+
   update (dt, t) {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER } = states
@@ -196,12 +275,12 @@ class GameScreen extends Container {
 
   updatePlaying (dt) {
     // check bullet collision
-    const { bullets, enemies, mageChar, portals } = this
+    const { bullets, enemies, mageChar, pickups, portals } = this
 
     bullets.map(bullet => {
       if (enemies) {
         enemies.map(enemy => {
-          if (entity.hit(enemy, bullet)) {
+          if (!bullet.dead && entity.hit(enemy, bullet)) {
             bullet.dead = true
             enemy.hit(bullet.dmg)
           }
@@ -209,7 +288,13 @@ class GameScreen extends Container {
       }
     })
 
+    entity.hits(mageChar, pickups, pickup => this.collectPickup(pickup))
+
     entity.hits(mageChar, portals, portal => portal.onCollide())
+
+    if (this.finalExit && entity.hit(mageChar, this.finalExit)) {
+      this.finalExit.onCollide()
+    }
 
     if (this.portalTimeCounter > 0) {
       this.portalTimeCounter -= dt
