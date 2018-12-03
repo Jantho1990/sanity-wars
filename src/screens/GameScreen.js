@@ -2,14 +2,19 @@ import Container from '../../titus/Container'
 import State from '../../titus/State'
 import states from '../states'
 import Camera from '../../titus/Camera'
-import EnemyPlaygroundLevel from '../EnemyPlaygroundLevel'
+import PortalMapLevel from '../PortalMapLevel'
 import TiledLoader from '../../titus/TiledLoader';
 import MageChar from '../entities/MageChar';
-import EnemyPlaygroundManifest from '../../resources/manifests/EnemyPlaygroundManifest'
+import PortalMapManifest from '../../resources/manifests/PortalMapManifest'
 import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
 import Eyeball from '../entities/enemies/Eyeball';
 import entity from '../../titus/utils/entity';
+import { rand, randOneFrom } from '../../titus/utils/math'
+import Portal from '../entities/triggers/Portal';
+import WorldMap from '../WorldMap'
+import { PORTAL_WAIT_TIME } from '../constants';
+import { GameData } from '../../titus/Game'
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -33,36 +38,104 @@ class GameScreen extends Container {
       h: game.h
     }))
 
-    const tiledLoader = new TiledLoader(EnemyPlaygroundManifest)
+    /* const tiledLoader = new TiledLoader(PortalMapManifest)
 
-    tiledLoader.levelLoad('Enemy Playground')
+    tiledLoader.levelLoad('Map Portal Test 2')
       .then((level => this.setupLevel(level, false)))
-      .then(() => this.loaded = true)
+      .then(() => this.loaded = true) */
+    
+    this.worldMap = new WorldMap(PortalMapManifest)
+    this.worldMap.onDone(() => {
+      this.onWorldMapLoad()
+      this.loaded = true
+    })
+
+    this.portalTimeCounter = 0
+    GameData.set('portal_time_counter', this.portalTimeCounter)
   }
 
-  setupLevel (json, parsed) {
-    const { camera, controls, gameState } = this
+  onWorldMapLoad () {
+    const {
+      camera,
+      controls,
+      gameState,
+      worldMap
+    } = this
+    const level = worldMap.level('Map Portal Test 2')
+    this.level = level
 
-    const map = new EnemyPlaygroundLevel(json, parsed)
+    const map = level.map
     this.map = camera.add(map)
 
     const mageChar = new MageChar(controls, map)
-    mageChar.pos.x = map.spawns.player[0].x
-    mageChar.pos.y = map.spawns.player[0].y
-    this.mageChar = camera.add(mageChar)
+    mageChar.pos.x = map.spawns.player.x
+    mageChar.pos.y = map.spawns.player.y
+    // mageChar.pos.copy(map.spawnPlayer(mageChar))
+    // debugger
+    
+    this.portals = camera.add(new Container())
+    this.portals.type = 'portals'
+    map.spawns.portals.forEach(data => {
+      const { x, y, link } = data
+      const portal = this.portals.add(new Portal(mageChar, link))
+      portal.pos.set(x, y)
+      console.log('Portal at', x, y)
+    })
+    EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
+      const { camera, worldMap, mageChar } = this
+      camera.remove(c => c.name === this.map.name)
+      camera.remove(c => c.type === 'portals')
 
-    this.enemies = camera.add(new Container())
+      const level = worldMap.level(levelName)
+      this.level = level
+
+      const map = level.map
+      this.map = camera.add(map)
+      
+      mageChar.map = this.map
+
+      this.portals = camera.add(new Container())
+      this.portals.type = 'portals'
+      map.spawns.portals.forEach(data => {
+        const { x, y, link } = data
+        const portal = this.portals.add(new Portal(mageChar, link))
+        portal.pos.set(x, y)
+        console.log('Portal at', x, y)
+      })
+
+      // spawn the player on the newly loaded map, at the link
+      // to the portal they triggered in the previous map
+      const l = link ? 0 : 1 // hack to select whatever link isn't
+      const ppos = this.portals.children[l].pos
+      // debugger
+      mageChar.pos.copy({
+        x: ppos.x,
+        y: ppos.y - mageChar.h + 32 // offset of portal height
+      })
+      // move player back to front of render
+      camera.remove(c => c.name === mageChar.name)
+      camera.add(mageChar)
+      camera.focus()
+
+      this.portalTimeCounter = PORTAL_WAIT_TIME
+      GameData.set('portal_time_counter', this.portalTimeCounter)
+    })
+    
+    /* this.enemies = camera.add(new Container())
     map.spawns.enemies.forEach(data => {
       const { type, x, y, properties = {} } = data
       const enemy = this.enemies.add(this.makeEnemy(type))
       enemy.pos.set(x, y)
-    })
-
+    }) */
+    
     this.bullets = camera.add(new Container())
     EventsHandler.listen('addBullet', bullet => {
       this.bullets.add(bullet)
     })
-
+    
+    // need to spawn player last so they appear above other graphics
+    this.mageChar = camera.add(mageChar)
+    
     camera.worldSize = { w: map.w, h: map.h }
     camera.setSubject(mageChar)
   }
@@ -80,6 +153,8 @@ class GameScreen extends Container {
   update (dt, t) {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER } = states
+
+    window.Debug.addLine('Camera Children', this.camera.children.length)
 
     switch (state.get()) {
       case LOADING:
@@ -121,7 +196,7 @@ class GameScreen extends Container {
 
   updatePlaying (dt) {
     // check bullet collision
-    const { bullets, enemies, player } = this
+    const { bullets, enemies, mageChar, portals } = this
 
     bullets.map(bullet => {
       if (enemies) {
@@ -133,6 +208,13 @@ class GameScreen extends Container {
         })
       }
     })
+
+    entity.hits(mageChar, portals, portal => portal.onCollide())
+
+    if (this.portalTimeCounter > 0) {
+      this.portalTimeCounter -= dt
+      GameData.set('portal_time_counter', this.portalTimeCounter)
+    }
   }
 }
 

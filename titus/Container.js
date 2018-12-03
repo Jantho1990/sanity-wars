@@ -36,7 +36,7 @@ class Container {
     this.children = this.children.filter(c => {
       return typeof child !== 'function'
         ? c !== child
-        : child(c)
+        : !child(c)
     })
     
     return child
