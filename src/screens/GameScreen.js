@@ -96,7 +96,7 @@ class GameScreen extends Container {
       const { x, y } = data
       const pickup = this.pickups.add(new TomePickup())
       pickup.pos.set(x, y)
-      console.log('Pickup at', x, y)
+      // console.log('Pickup at', x, y)
     })
     
     this.portals = camera.add(new Container())
@@ -134,7 +134,7 @@ class GameScreen extends Container {
         const { x, y } = data
         const pickup = this.pickups.add(new TomePickup())
         pickup.pos.set(x, y)
-        console.log('Pickup at', x, y)
+        // console.log('Pickup at', x, y)
       })
 
       this.portals = camera.add(new Container())
@@ -202,6 +202,15 @@ class GameScreen extends Container {
     return enemy
   }
 
+  collectPickup (pickup) {
+    this.pickupsCounter++
+    pickup.dead = true
+
+    EventsHandler.dispatch('pickupCollected', {
+      count: this.pickupsCounter
+    })
+  }
+
   update (dt, t) {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER } = states
@@ -248,7 +257,7 @@ class GameScreen extends Container {
 
   updatePlaying (dt) {
     // check bullet collision
-    const { bullets, enemies, mageChar, portals } = this
+    const { bullets, enemies, mageChar, pickups, portals } = this
 
     bullets.map(bullet => {
       if (enemies) {
@@ -260,6 +269,8 @@ class GameScreen extends Container {
         })
       }
     })
+
+    entity.hits(mageChar, pickups, pickup => this.collectPickup(pickup))
 
     entity.hits(mageChar, portals, portal => portal.onCollide())
 
