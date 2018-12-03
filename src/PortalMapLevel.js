@@ -286,6 +286,9 @@ class PortalMapLevel extends TileMap {
     if (entity.type) {
       type = entity.type
     }
+    if (!type) {
+      debugger
+    }
 
     return {
       x: tile.pos.x,

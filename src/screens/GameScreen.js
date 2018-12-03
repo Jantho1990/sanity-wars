@@ -143,11 +143,13 @@ class GameScreen extends Container {
 
       // Save spawns of enemies before unloading them
       this.map.spawns.enemies = []
-      enemies.children.forEach(enemy => this.map.spawns.enemies.push({
-        x: enemy.pos.x,
-        y: enemy.pos.y,
-        type: enemy.type || null
-      }))
+      enemies.children.forEach(enemy => {
+        this.map.spawns.enemies.push({
+          x: enemy.pos.x,
+          y: enemy.pos.y,
+          type: enemy.type || null
+        })
+      })
 
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
@@ -195,12 +197,11 @@ class GameScreen extends Container {
       this.enemies.type = 'enemies'
       map.spawns.enemies.forEach(data => {
         const { type, x, y, properties = {} } = data
+
         const enemy = this.enemies.add(this.makeEnemy(type))
-        if (enemy === undefined) {
-          debugger
-        }
         enemy.pos.set(x, y)
-        if (enemy.type === 'eyeball') {
+
+        if (type === 'eyeball') {
           this.eyeballsCounter++
         }
       })
@@ -251,7 +252,7 @@ class GameScreen extends Container {
         enemy = new Eyeball(this.mageChar)
         break
       default:
-        // throw new Error(`Unknown enemy type (${type}).`)
+        throw new Error(`Unknown enemy type (${type}).`)
     }
     return enemy
   }
@@ -320,7 +321,6 @@ class GameScreen extends Container {
 
     if (eyeballsCounter < eyeballsMax) {
       const eyeball = this.makeEnemy('eyeball')
-      eyeball.type = 'eyeball'
       map.spawnEntity(eyeball, {}, mageChar)
       this.enemies.add(eyeball)
       this.eyeballsCounter++
