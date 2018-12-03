@@ -129,10 +129,8 @@ class PortalMapLevel extends TileMap {
           !tileBelow.frame.walkable) {
         let valid = true
         for (let i = 0; i < avoid.length; i++) {
-          const target = avoid[i]
-          distanceToTarget = distance(tile.pos, target)
-          if (distanceToTarget <= 100) {
-            valid = false
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
             break
           }
         }
@@ -167,10 +165,8 @@ class PortalMapLevel extends TileMap {
           !tileBelow.frame.walkable) {
         let valid = true
         for (let i = 0; i < avoid.length; i++) {
-          const target = avoid[i]
-          distanceToTarget = distance(tile.pos, target)
-          if (distanceToTarget <= 300) {
-            valid = false
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
             break
           }
         }
@@ -186,8 +182,12 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  isFarEnoughAway (ent1, ent2) {
-
+  isFarEnoughAway (ent1, ent2, threshold = 100) {
+    const distanceToTarget = distance(ent1, ent2)
+    if (distanceToTarget <= threshold) {
+      return false
+    }
+    return true
   }
 
   setFinalExitSpawn () {
