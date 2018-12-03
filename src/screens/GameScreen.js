@@ -107,6 +107,7 @@ class GameScreen extends Container {
         x: ppos.x,
         y: ppos.y - 32 // offset of portal height
       })
+      camera.focus()
 
       this.portalTimeCounter = PORTAL_WAIT_TIME
       GameData.set('portal_time_counter', this.portalTimeCounter)
