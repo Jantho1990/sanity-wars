@@ -20,6 +20,13 @@ import TestEndScreen from './TestEndScreen';
 import TomePickup from '../entities/pickups/TomePickup';
 import TestEndPartialGoodScreen from './TestEndPartialGoodScreen';
 import TestEndGoodScreen from './TestEndGoodScreen';
+import SoundPool from '../../titus/sound/SoundPool';
+
+const sounds = {
+  music: [
+    new SoundPool('resources/music/Techneurotic.mp3')
+  ]
+}
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -282,6 +289,9 @@ class GameScreen extends Container {
         }
         break;
       case READY:
+        sounds.music[0].play({
+          loop: true
+        })
         state.set(PLAYING)
         if (state.first) {
           // this.scoreText.text = 'GET READY'
@@ -301,6 +311,7 @@ class GameScreen extends Container {
       case GAMEOVER:
         if (state.first) {
           player.gameOver = true
+          sounds.music[0].stop()
         }
         super.update(dt, t)
 
