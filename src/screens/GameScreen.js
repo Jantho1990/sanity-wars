@@ -84,7 +84,7 @@ class GameScreen extends Container {
     })
 
     if (map.spawns.finalExit) {
-      this.finalExit = camera.add(new FinalExit())
+      this.finalExit = camera.add(new FinalExit(mageChar))
       this.finalExit.pos.copy(map.spawns.finalExit)
       this.finalExit.name = 'Final Exit'
     }
@@ -112,7 +112,7 @@ class GameScreen extends Container {
       })
 
       if (map.spawns.finalExit) {
-        this.finalExit = camera.add(new FinalExit())
+        this.finalExit = camera.add(new FinalExit(mageChar))
         this.finalExit.pos.copy(map.spawns.finalExit)
         this.finalExit.name = 'Final Exit'
       } else if (this.finalExit) {
@@ -227,6 +227,10 @@ class GameScreen extends Container {
     })
 
     entity.hits(mageChar, portals, portal => portal.onCollide())
+
+    if (this.finalExit && entity.hit(mageChar, this.finalExit)) {
+      this.finalExit.onCollide()
+    }
 
     if (this.portalTimeCounter > 0) {
       this.portalTimeCounter -= dt

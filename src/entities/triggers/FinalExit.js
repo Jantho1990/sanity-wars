@@ -14,11 +14,22 @@ const animations = {
 }
 
 class FinalExit extends TileSprite {
-  constructor () {
+  constructor (player) {
     super(texture, 32, 32)
+
+    this.player = player
 
     this.anims.add('swirl', animations.swirl, 0.0667)
     this.anims.play('swirl')
+  }
+
+  onCollide () {
+    const { player: { controls: { keys } } } = this
+
+    // if E key is being pressed
+    if (keys.isBeingPressed(69)) {
+      debugger
+    }
   }
 }
 
