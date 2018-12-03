@@ -1,0 +1,14 @@
+{ "columns":27,
+ "image":"Fumiko.png",
+ "imageheight":256,
+ "imagewidth":864,
+ "margin":0,
+ "name":"fumiko",
+ "spacing":0,
+ "tilecount":216,
+ "tiledversion":"1.2.1",
+ "tileheight":32,
+ "tilewidth":24,
+ "type":"tileset",
+ "version":1.2
+}

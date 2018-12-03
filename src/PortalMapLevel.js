@@ -3,7 +3,7 @@ import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
 import { rand, randOneFrom, distance } from '../titus/utils/math'
 
-const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain.png")
+const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain_ds.png")
 
 class PortalMapLevel extends TileMap {
   constructor (data, parsed) {

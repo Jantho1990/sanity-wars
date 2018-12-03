@@ -4,8 +4,9 @@ import SanityCaster from '../systems/SanityCaster'
 import Container from '../../titus/Container'
 import SoundPool from '../../titus/sound/SoundPool'
 import { GameData } from '../../titus/Game';
+import { animations } from '../../resources/characters/mage/fumiko-animations'
 
-const texture = new Texture('resources/characters/mage/sara-cal.png', (t, e) => {
+const texture = new Texture('resources/characters/mage/Fumiko.png', (t, e) => {
   if (t.img.src.indexOf('data:image') === -1) {
     t.removeTransparencyPixels([255, 0, 255])
   }
@@ -13,32 +14,6 @@ const texture = new Texture('resources/characters/mage/sara-cal.png', (t, e) => 
 
 const sounds = {
   jump: new SoundPool('resources/sounds/jump.wav')
-}
-
-const animations = {
-  'stand': [
-    { x: 0, y: 8, w: 32, h: 48 }
-  ],
-  'slap': [
-    { x: 36, y: 8, w: 32, h: 48 },
-    { x: 72, y: 8, w: 32, h: 48 },
-    { x: 108, y: 8, w: 32, h: 48 }
-  ],
-  'bow': [
-    { x: 188, y: 72, w: 40, h: 48 },
-    { x: 232, y: 72, w: 40, h: 48 },
-    { x: 276, y: 72, w: 40, h: 48 }
-  ],
-  'dying': [
-    { x: 36, y: 136, w: 32, h: 48 },
-    { x: 72, y: 136, w: 32, h: 48 },
-    { x: 112, y: 152, w: 56, h: 32 }
-  ],
-  'walk': [
-    { x: 0, y: 72, w: 32, h: 48 },
-    { x: 36, y: 72, w: 32, h: 48 },
-    { x: 72, y: 72, w: 32, h: 48 }
-  ]
 }
 
 
@@ -94,8 +69,8 @@ class MageChar extends PlayerChar {
     this.hitBox = {
       x: 0,
       y: 0,
-      w: 32,
-      h: 48
+      w: 24,
+      h: 32
     }
 
     this.anims.addBulk([
