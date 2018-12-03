@@ -105,7 +105,7 @@ class GameScreen extends Container {
       // debugger
       mageChar.pos.copy({
         x: ppos.x,
-        y: ppos.y - 32 // offset of portal height
+        y: ppos.y - mageChar.h + 32 // offset of portal height
       })
       camera.focus()
 
