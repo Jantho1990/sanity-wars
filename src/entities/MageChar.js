@@ -4,9 +4,9 @@ import SanityCaster from '../systems/SanityCaster'
 import Container from '../../titus/Container'
 import SoundPool from '../../titus/sound/SoundPool'
 import { GameData } from '../../titus/Game';
-import { animations } from '../../resources/characters/mage/sara-cal-animations'
+import { animations } from '../../resources/characters/mage/fumiko-animations'
 
-const texture = new Texture('resources/characters/mage/sara-cal.png', (t, e) => {
+const texture = new Texture('resources/characters/mage/Fumiko.png', (t, e) => {
   if (t.img.src.indexOf('data:image') === -1) {
     t.removeTransparencyPixels([255, 0, 255])
   }
@@ -69,8 +69,8 @@ class MageChar extends PlayerChar {
     this.hitBox = {
       x: 0,
       y: 0,
-      w: 32,
-      h: 48
+      w: 24,
+      h: 32
     }
 
     this.anims.addBulk([
