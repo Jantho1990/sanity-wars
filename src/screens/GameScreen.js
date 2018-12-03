@@ -60,7 +60,11 @@ class GameScreen extends Container {
 
   setEndGame () {
     EventsHandler.listen('finalExit', () => {
-      this.game.setScene(new TestEndScreen(this.game, this.controls))
+      this.game.setScene(new TestEndScreen(this.game, this.controls, () => {
+        this.game.setScene(
+          new GameScreen(this.game, this.controls, {})
+        )
+      }))
     })
   }
 
