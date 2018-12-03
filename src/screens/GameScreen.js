@@ -57,6 +57,7 @@ class GameScreen extends Container {
     GameData.set('portal_time_counter', this.portalTimeCounter)
 
     this.pickupsCounter = 0
+    GameData.set('pickups', this.pickupsCounter)
 
     this.setEndGame()
   }
@@ -206,9 +207,7 @@ class GameScreen extends Container {
     this.pickupsCounter++
     pickup.dead = true
 
-    EventsHandler.dispatch('pickupCollected', {
-      count: this.pickupsCounter
-    })
+    GameData.set('pickups', this.pickupsCounter)
   }
 
   update (dt, t) {
