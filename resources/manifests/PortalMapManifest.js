@@ -14,6 +14,11 @@ export default {
       "name": "Map Portal Test 3",
       "url": "resources/levels/MapPortalTest3.json",
       "tileset": "OPP Jungle"
+    },
+    {
+      "name": "Map Portal Test 4",
+      "url": "resources/levels/MapPortalTest4.json",
+      "tileset": "OPP Jungle"
     }
   ],
   "tilesets": [{
