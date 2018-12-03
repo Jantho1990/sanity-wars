@@ -17,6 +17,13 @@ class TomePickup extends TileSprite {
     this.frame.x = 11
     this.frame.y = 12
   }
+
+  update (dt, t) {
+    super.update(dt, t)
+
+    // bob a bit
+    this.pos.y += Math.sin(t / 0.1) * 0.35
+  }
 }
 
 export default TomePickup

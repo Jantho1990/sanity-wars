@@ -32,7 +32,7 @@ class PortalMapLevel extends TileMap {
     return {
       player,
       pickups: [
-        pickup
+        this.pickupOffset(pickup)
       ],
       portals: [
         portal1,
@@ -41,7 +41,21 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnedInSameLocation(ent1, ent2) {
+  /**
+   * Hack to center a 16x16 sprite over a 32x32 tile.
+   *
+   * @param {object} ent A cartesian coordinate.
+   *
+   * @return {object}
+   */
+  pickupOffset (ent) {
+    return {
+      x: ent.x + (this.tileW / 4),
+      y: ent.y
+    }
+  }
+
+  spawnedInSameLocation (ent1, ent2) {
     return ent1.x === ent2.x &&
            ent1.y === ent2.y
   }
