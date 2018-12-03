@@ -61,6 +61,15 @@ class GameScreen extends Container {
     this.pickupsCounter = 0
     GameData.set('pickups', this.pickupsCounter)
 
+    // not sure if this should go here, but we'll work with it for now
+    this.eyeballsCounter = 0
+    this.eyeballSpawnRate = 0.33
+    this.eyeballSpawnCounter = 0
+    this.eyeballsMax = 3
+    this.eyeballsMaxRate = 10
+    this.eyeballsMaxRateCounter = 0
+    this.eyeballsMaxHardLimit = 7
+
     this.setEndGame()
   }
 
@@ -130,17 +139,35 @@ class GameScreen extends Container {
       this.finalExit.name = 'Final Exit'
     }
 
+    this.enemies = camera.add(new Container())
+    this.enemies.type = 'enemies'
+
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
-      const { camera, worldMap, mageChar } = this
+      this.state.set(states.UPDATING)
+      const { camera, enemies, worldMap, mageChar } = this
+
+      // Save spawns of enemies before unloading them
+      this.map.spawns.enemies = []
+      enemies.children.forEach(enemy => {
+        this.map.spawns.enemies.push({
+          x: enemy.pos.x,
+          y: enemy.pos.y,
+          type: enemy.type || null
+        })
+      })
+
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
       camera.remove(c => c.type === 'pickups')
+      camera.remove(c => c.type === 'enemies')
+      this.eyeballsCounter = 0
 
       const level = worldMap.level(levelName)
       this.level = level
 
       const map = level.map
       this.map = camera.add(map)
+      // debugger
       
       mageChar.map = this.map
 
@@ -171,6 +198,19 @@ class GameScreen extends Container {
         delete this.finalExit
       }
 
+      this.enemies = camera.add(new Container())
+      this.enemies.type = 'enemies'
+      map.spawns.enemies.forEach(data => {
+        const { type, x, y, properties = {} } = data
+
+        const enemy = this.enemies.add(this.makeEnemy(type))
+        enemy.pos.set(x, y)
+
+        if (type === 'eyeball') {
+          this.eyeballsCounter++
+        }
+      })
+
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
       const l = link ? 0 : 1 // hack to select whatever link isn't
@@ -187,14 +227,9 @@ class GameScreen extends Container {
 
       this.portalTimeCounter = PORTAL_WAIT_TIME
       GameData.set('portal_time_counter', this.portalTimeCounter)
+
+      this.state.set(states.PLAYING)
     })
-    
-    /* this.enemies = camera.add(new Container())
-    map.spawns.enemies.forEach(data => {
-      const { type, x, y, properties = {} } = data
-      const enemy = this.enemies.add(this.makeEnemy(type))
-      enemy.pos.set(x, y)
-    }) */
     
     this.bullets = camera.add(new Container())
     EventsHandler.listen('addBullet', bullet => {
@@ -213,7 +248,9 @@ class GameScreen extends Container {
     switch (type) {
       case 'eyeball':
         enemy = new Eyeball(this.mageChar)
-        break;
+        break
+      default:
+        throw new Error(`Unknown enemy type (${type}).`)
     }
     return enemy
   }
@@ -231,7 +268,7 @@ class GameScreen extends Container {
 
   update (dt, t) {
     const { state } = this
-    const { LOADING, READY, PLAYING, GAMEOVER } = states
+    const { LOADING, READY, PLAYING, GAMEOVER, UPDATING } = states
 
     window.Debug.addLine('Camera Children', this.camera.children.length)
 
@@ -258,6 +295,9 @@ class GameScreen extends Container {
         super.update(dt, t)
         this.updatePlaying(dt)
         break
+      case UPDATING:
+        // don't run anything
+        break
       case GAMEOVER:
         if (state.first) {
           player.gameOver = true
@@ -273,9 +313,40 @@ class GameScreen extends Container {
     state.update(dt)
   }
 
-  updatePlaying (dt) {
+  updatePlaying (dt, t) {
     // check bullet collision
-    const { bullets, enemies, mageChar, pickups, portals } = this
+    const {
+      bullets,
+      enemies,
+      eyeballsCounter,
+      eyeballsMax,
+      eyeballsMaxHardLimit,
+      eyeballsMaxRate,
+      eyeballSpawnRate,
+      map,
+      mageChar,
+      pickups,
+      portals
+    } = this
+
+    if (
+      eyeballsCounter < eyeballsMaxHardLimit &&
+      eyeballsCounter < eyeballsMax &&
+      (this.eyeballSpawnCounter += dt) / eyeballSpawnRate > 1
+    ) {
+      const eyeball = this.makeEnemy('eyeball')
+      eyeball.pos.copy(map.spawnEntity(eyeball, { offMap: true }, mageChar, ...this.enemies.children))
+      this.enemies.add(eyeball)
+      this.eyeballsCounter++
+      // console.log('Enemy spawned at', eyeball.pos.x, eyeball.pos.y)
+      this.eyeballSpawnCounter = 0
+    }
+
+    // make the game harder by adding more eyeballs as time passes by
+    if ((this.eyeballsMaxRateCounter += dt) / eyeballsMaxRate > 1) {
+      this.eyeballsMax++
+      this.eyeballsMaxRateCounter -= eyeballsMaxRate
+    }
 
     bullets.map(bullet => {
       if (enemies) {
@@ -283,6 +354,9 @@ class GameScreen extends Container {
           if (!bullet.dead && entity.hit(enemy, bullet)) {
             bullet.dead = true
             enemy.hit(bullet.dmg)
+            if (enemy.type === 'eyeball') {
+              this.eyeballsCounter--
+            }
           }
         })
       }

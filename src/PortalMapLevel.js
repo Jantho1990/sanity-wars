@@ -37,7 +37,8 @@ class PortalMapLevel extends TileMap {
       portals: [
         portal1,
         portal2
-      ]
+      ],
+      enemies: []
     }
   }
 
@@ -237,6 +238,94 @@ class PortalMapLevel extends TileMap {
     }
 
     this.spawns.finalExit = finalSpawn
+  }
+
+  /**
+   * Spawn an entity on a random location on the map.
+   *
+   * @param {object} entity An entity object.
+   * @param {object} config Any additional settings.
+   * @param {...object} avoid Entities to avoid.
+   * 
+   * @return {object} The spawned entity.
+   */
+  spawnEntity (entity, config = {}, ...avoid) {
+    const { mapW, mapH, tileW, tileH } = this
+    const { onTheGround, offScreen, offMap } = config
+    let found = false
+    let x, y
+
+
+    let tile, tileAbove, tileBelow
+    while (!found) {
+      // this is ugly :(
+      if (!offMap) {
+        x = rand(mapW)
+        y = rand(mapH)
+
+        tile = this.tileAtMapPos({ x, y })
+
+        let groundCheck = true
+        if (onTheGround) {
+          tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+          tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+          groundCheck = tileAbove.frame.walkable && !tileBelow.frame.walkable
+        }
+
+        if (tile.frame.walkable &&
+            groundCheck) {
+          found = this.avoidEntities(tile.pos, ...avoid)
+          if (found) {
+            // this is also ugly :(
+            x = tile.pos.x
+            y = tile.pos.y
+          }
+        }
+      } else {
+        let offset = 300
+        let w = mapW * tileW
+        let h = mapH * tileH
+        x = randOneFrom([
+          rand(-offset, 0),
+          rand(w, w + offset)
+        ]),
+        y = randOneFrom([
+          rand(-offset, 0),
+          rand(h, h + offset)
+        ])
+        found = this.avoidEntities({ x, y }, ...avoid)
+      }      
+    }
+
+    // hack
+    let type
+    if (entity.type) {
+      type = entity.type
+    }
+    if (!type) {
+      debugger
+    }
+
+    return {
+      x,
+      y,
+      type
+    }
+  }
+
+  avoidEntities (target, ...avoid) {
+    let valid = true
+    for (let i = 0; i < avoid.length; i++) {
+      valid = this.isFarEnoughAway(target, avoid[i])
+      if (!valid) {
+        break
+      }
+    }
+    if (valid) {
+      return true
+    }
+
+    return false
   }
 }
 

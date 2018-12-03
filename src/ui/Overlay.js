@@ -16,7 +16,7 @@ class Overlay extends UserInterface {
 
     this.pickupCounter = new PickupCounterComponent({
       pos: {
-        x: Game.pixelAtPercent(91, w),
+        x: Game.pixelAtPercent(80, w),
         y: Game.pixelAtPercent(92.5, h)
       }
     })

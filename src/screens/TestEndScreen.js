@@ -17,7 +17,7 @@ class TestEndScreen extends Container {
     this.drawBackground()
 
     const text = new Text('You reached the final exit.', {
-      font: '40pt Arial',
+      font: '20pt Arial',
       fill: 'black'
     })
     text.pos.set(

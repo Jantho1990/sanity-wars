@@ -52,6 +52,8 @@ class Eyeball extends TileSprite {
   constructor (target) {
     super(texture, 32, 32)
 
+    this.type = 'eyeball'
+
     this.hitbox = {
       x: 4,
       y: 4,

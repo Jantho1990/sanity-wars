@@ -10,6 +10,9 @@ import Overlay from './ui/Overlay';
 let width = window.innerWidth * 2/3
 let height = window.innerHeight * 4/5
 
+width = 32 * 15
+height = 32 * 10
+
 const game = new Game(width, height)
 const controls = {
   keys: new KeyControls()
