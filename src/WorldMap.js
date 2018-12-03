@@ -55,7 +55,7 @@ class WorldMap {
     const { levels } = this
     levels.forEach((level, i) => {
       if (this.isFinalExit(i)) {
-        debugger
+        level.map.setFinalExitSpawn() 
       }
     })
   }

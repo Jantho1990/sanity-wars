@@ -80,7 +80,7 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnPortal(player) {
+  spawnPortal (player) {
     const { mapW, mapH } = this
     let found = false
     let x, y
@@ -110,12 +110,51 @@ class PortalMapLevel extends TileMap {
     }
   }
 
-  spawnExit(exit) {
+  spawnFinalExit (...avoid) {
+    const { mapW, mapH } = this
+    let found = false
+    let x, y
+
+    let tile, tileAbove, tileBelow, distanceToTarget
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          const target = avoid[i]
+          distanceToTarget = distance(tile.pos, target)
+          if (distanceToTarget <= 100) {
+            valid = false
+            break
+          }
+          if (valid) {
+            found = true
+          }
+        }
+      }
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y
+    }
+  }
+
+  spawnObjective (objective) {
     // nothing here yet
   }
 
-  spawnObjective(objective) {
-    // nothing here yet
+  setFinalExitSpawn () {
+    const { player, portals } = this.spawns
+    this.spawns.finalExit = this.spawnFinalExit(player, ...portals)
   }
 }
 
