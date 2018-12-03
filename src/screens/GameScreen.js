@@ -89,7 +89,9 @@ class GameScreen extends Container {
       const map = level.map
       this.level = level
       this.map = camera.add(level.map)
+      
       mageChar.map = this.map
+
       this.portals = camera.add(new Container())
       this.portals.type = 'portals'
       map.spawns.portals.forEach(data => {
@@ -107,6 +109,9 @@ class GameScreen extends Container {
         x: ppos.x,
         y: ppos.y - mageChar.h + 32 // offset of portal height
       })
+      // move player back to front of render
+      camera.remove(c => c.name === mageChar.name)
+      camera.add(mageChar)
       camera.focus()
 
       this.portalTimeCounter = PORTAL_WAIT_TIME
