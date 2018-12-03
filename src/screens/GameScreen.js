@@ -5,7 +5,7 @@ import Camera from '../../titus/Camera'
 import PortalMapLevel from '../PortalMapLevel'
 import TiledLoader from '../../titus/TiledLoader';
 import MageChar from '../entities/MageChar';
-import PortalMapManifest from '../../resources/manifests/PortalMapManifest'
+import MoonTestManifest from '../../resources/manifests/MoonTestManifest'
 import EventsHandler from '../../titus/EventsHandler'
 import Debug from '../../titus/Debug';
 import Eyeball from '../entities/enemies/Eyeball';
@@ -43,13 +43,13 @@ class GameScreen extends Container {
       h: game.h
     }))
 
-    /* const tiledLoader = new TiledLoader(PortalMapManifest)
+    /* const tiledLoader = new TiledLoader(MoonTestManifest)
 
     tiledLoader.levelLoad('Map Portal Test 2')
       .then((level => this.setupLevel(level, false)))
       .then(() => this.loaded = true) */
     
-    this.worldMap = new WorldMap(PortalMapManifest)
+    this.worldMap = new WorldMap(MoonTestManifest)
     this.worldMap.onDone(() => {
       this.onWorldMapLoad()
       this.loaded = true
@@ -103,7 +103,7 @@ class GameScreen extends Container {
       gameState,
       worldMap
     } = this
-    const level = worldMap.level('Map Portal Test 2')
+    const level = worldMap.level('Moon1')
     this.level = level
 
     const map = level.map

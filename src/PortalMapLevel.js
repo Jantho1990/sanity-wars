@@ -3,10 +3,11 @@ import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
 import { rand, randOneFrom, distance } from '../titus/utils/math'
 
-const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain_ds.png")
+const texture = new Texture("resources/tilesets/moon-dirt/platformertiles.png")
 
 class PortalMapLevel extends TileMap {
   constructor (data, parsed) {
+    
     if (!parsed) {
       data = tiledParser(data)
     }
@@ -14,14 +15,19 @@ class PortalMapLevel extends TileMap {
     const { tileW, tileH, mapW, mapH, tiles } = data
     super(tiles, mapW, mapH, tileH, tileW, texture)
 
+    
     this.spawns = parsed ? data.spawns : this.getSpawnLocations(data)
     this.data = data
   }
 
   getSpawnLocations (data) {
+    
     const player = this.spawnPlayer()
+    
     let pickup = this.spawnPickup(player)
+    
     let portal1 = this.spawnPortal(player, pickup)
+    
     let portal2 = this.spawnPortal(player, pickup, portal1)
 
     // hackish way to keep portals from spawning on top of each other
@@ -67,7 +73,7 @@ class PortalMapLevel extends TileMap {
     let x, y
 
     // specify where the corners of the map are
-    const offset = 5 // offset in tiles
+    const offset = 6 // offset in tiles
     let cornersX = [
       [0, offset],
       [mapW - offset, mapW]
@@ -303,7 +309,7 @@ class PortalMapLevel extends TileMap {
       type = entity.type
     }
     if (!type) {
-      debugger
+      
     }
 
     return {

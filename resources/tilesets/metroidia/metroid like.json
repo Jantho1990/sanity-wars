@@ -1,0 +1,15 @@
+{ "columns":10,
+ "image":"metroid like.png",
+ "imageheight":256,
+ "imagewidth":320,
+ "margin":0,
+ "name":"metroid like",
+ "spacing":0,
+ "tilecount":80,
+ "tiledversion":"1.2.1",
+ "tileheight":32,
+ "tilewidth":32,
+ "transparentcolor":"#140c1c",
+ "type":"tileset",
+ "version":1.2
+}
