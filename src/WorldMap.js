@@ -1,5 +1,8 @@
 import TiledLoader from "../titus/TiledLoader";
 import PortalMapLevel from "./PortalMapLevel";
+import math from '../titus/utils/math'
+
+const finalExitRandomArray = []
 
 /**
  * Manager for loading multiple connected level-maps.
@@ -15,6 +18,8 @@ class WorldMap {
     
     this.portalLinkCounter = 0
 
+    this.finalExit = null
+
     const levelLoader = new TiledLoader(manifest)
 
     const { levels } = manifest
@@ -28,7 +33,9 @@ class WorldMap {
         .then(data => this.setupLevel(this.levels[i], data))
         .then(() => {
           if (--this.progress === 0) {
+            this.seedFinalExitRandomArray()
             this.linkPortals()
+            this.createFinalExit()
             this.loaded = true
             this.callbacks.forEach(cb => cb(this))
           }
@@ -40,6 +47,41 @@ class WorldMap {
     const map = new PortalMapLevel(json, parsed)
     level.map = map
     level.map.name = level.name
+
+    
+  }
+
+  createFinalExit () {
+    const { levels } = this
+    levels.forEach((level, i) => {
+      if (this.isFinalExit(i)) {
+        debugger
+      }
+    })
+  }
+
+  seedFinalExitRandomArray () {
+    const { levels } = this
+    let seeded = false
+    levels.forEach((l, i) => {
+      let v = 0
+      if (!seeded) {
+        v = math.rand(0, 4)
+        if (v % 2 === 1) {
+          seeded = true
+          v = 1
+        } else if (i === levels.length - 1) {
+          v = 1
+        } else {
+          v = 0
+        }
+      }
+      finalExitRandomArray.push(v)
+    })
+  }
+
+  isFinalExit (i) {
+    return finalExitRandomArray[i]
   }
 
   linkPortals () {
