@@ -143,6 +143,7 @@ class GameScreen extends Container {
       camera.remove(c => c.type === 'portals')
       camera.remove(c => c.type === 'pickups')
       camera.remove(c => c.type === 'enemies')
+      this.eyeballsCounter = 0
 
       const level = worldMap.level(levelName)
       this.level = level
@@ -185,6 +186,9 @@ class GameScreen extends Container {
         const { type, x, y, properties = {} } = data
         const enemy = this.enemies.add(this.makeEnemy(type))
         enemy.pos.set(x, y)
+        if (enemy.type === 'eyeball') {
+          this.eyeballsCounter++
+        }
       })
 
       // spawn the player on the newly loaded map, at the link
