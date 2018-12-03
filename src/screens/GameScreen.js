@@ -103,7 +103,7 @@ class GameScreen extends Container {
       gameState,
       worldMap
     } = this
-    const level = worldMap.level('Moon1')
+    const level = worldMap.level('Moon6')
     this.level = level
 
     const map = level.map
