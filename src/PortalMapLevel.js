@@ -25,10 +25,20 @@ class PortalMapLevel extends TileMap {
       this.spawnPortal(player)
     ]
 
+    // hackish way to keep portals from spawning on top of each other
+    while (this.spawnedInSameLocation(portals[0], portals[1])) {
+      portals[0] = this.spawnPortal(player)
+    }
+
     return {
       player,
       portals
     }
+  }
+
+  spawnedInSameLocation(ent1, ent2) {
+    return ent1.x === ent2.x &&
+           ent1.y === ent2.y
   }
 
   spawnPlayer () {
