@@ -18,6 +18,8 @@ import { GameData } from '../../titus/Game'
 import FinalExit from '../entities/triggers/FinalExit';
 import TestEndScreen from './TestEndScreen';
 import TomePickup from '../entities/pickups/TomePickup';
+import TestEndPartialGoodScreen from './TestEndPartialGoodScreen';
+import TestEndGoodScreen from './TestEndGoodScreen';
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -64,11 +66,24 @@ class GameScreen extends Container {
 
   setEndGame () {
     EventsHandler.listen('finalExit', () => {
-      this.game.setScene(new TestEndScreen(this.game, this.controls, () => {
+      // Game restart callback
+      const callback = () => {
         this.game.setScene(
           new GameScreen(this.game, this.controls, {})
         )
-      }))
+      }
+
+      // Set screen based on number of pickups collected
+      let screen
+      if (this.pickupsCounter === this.worldMap.levels.length) {
+        screen = new TestEndGoodScreen(this.game, this.controls, callback)
+      } else if (this.pickupsCounter > 0) {
+        screen = new TestEndPartialGoodScreen(this.game, this.controls, callback)
+      } else {
+        screen = new TestEndScreen(this.game, this.controls, callback)
+      }
+
+      this.game.setScene(screen)
     })
   }
 
