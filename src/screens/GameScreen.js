@@ -85,10 +85,12 @@ class GameScreen extends Container {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
+
       const level = worldMap.level(levelName)
-      const map = level.map
       this.level = level
-      this.map = camera.add(level.map)
+
+      const map = level.map
+      this.map = camera.add(map)
       
       mageChar.map = this.map
 
@@ -103,7 +105,8 @@ class GameScreen extends Container {
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
-      const ppos = this.portals.children[link].pos
+      const l = link ? 0 : 1 // hack to select whatever link isn't
+      const ppos = this.portals.children[l].pos
       // debugger
       mageChar.pos.copy({
         x: ppos.x,

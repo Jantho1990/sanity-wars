@@ -49,8 +49,8 @@ class WorldMap {
       if (i - 1 < 0) {
         i = levels.length
       }
-      const nextLevel = levels[(i - 1) % levels.length] // remainder is next level
-      const prevLevel = levels[(i + 1) % levels.length]// remainder is previous level
+      const nextLevel = levels[(i + 1) % levels.length] // remainder is next level
+      const prevLevel = levels[(i - 1) % levels.length]// remainder is previous level
 
       // we are assuming only two portals
       const { portals } = level.map.spawns
@@ -62,6 +62,7 @@ class WorldMap {
         link: 1,
         level: nextLevel.name
       }
+      console.log(portals, level.name)
     })
   }
 
