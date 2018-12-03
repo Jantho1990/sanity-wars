@@ -15,6 +15,7 @@ import Portal from '../entities/triggers/Portal';
 import WorldMap from '../WorldMap'
 import { PORTAL_WAIT_TIME } from '../constants';
 import { GameData } from '../../titus/Game'
+import FinalExit from '../entities/triggers/FinalExit';
 
 class GameScreen extends Container {
   constructor (game, controls, gameState) {
@@ -81,6 +82,13 @@ class GameScreen extends Container {
       portal.pos.set(x, y)
       console.log('Portal at', x, y)
     })
+
+    if (map.spawns.finalExit) {
+      this.finalExit = camera.add(new FinalExit())
+      this.finalExit.pos.copy(map.spawns.finalExit)
+      this.finalExit.name = 'Final Exit'
+    }
+
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
@@ -102,6 +110,15 @@ class GameScreen extends Container {
         portal.pos.set(x, y)
         console.log('Portal at', x, y)
       })
+
+      if (map.spawns.finalExit) {
+        this.finalExit = camera.add(new FinalExit())
+        this.finalExit.pos.copy(map.spawns.finalExit)
+        this.finalExit.name = 'Final Exit'
+      } else if (this.finalExit) {
+        camera.remove(c => c.name === 'Final Exit')
+        delete this.finalExit
+      }
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
