@@ -37,7 +37,8 @@ class PortalMapLevel extends TileMap {
       portals: [
         portal1,
         portal2
-      ]
+      ],
+      enemies: []
     }
   }
 
@@ -237,6 +238,60 @@ class PortalMapLevel extends TileMap {
     }
 
     this.spawns.finalExit = finalSpawn
+  }
+
+  /**
+   * Spawn an entity on a random location on the map.
+   *
+   * @param {object} entity An entity object.
+   * @param {object} config Any additional settings.
+   * @param {...object} avoid Entities to avoid.
+   * 
+   * @return {object} The spawned entity.
+   */
+  spawnEntity (entity, config = {}, ...avoid) {
+    const { mapW, mapH } = this
+    const { onTheGround, offscreen } = config
+    let found = false
+    let x, y
+
+
+    let tile, tileAbove, tileBelow
+    while (!found) {
+      x = rand(mapW)
+      y = rand(mapH)
+
+      tile = this.tileAtMapPos({ x, y })
+      tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+      tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+
+      if (tile.frame.walkable &&
+          tileAbove.frame.walkable &&
+          !tileBelow.frame.walkable) {
+        let valid = true
+        for (let i = 0; i < avoid.length; i++) {
+          valid = this.isFarEnoughAway(tile.pos, avoid[i])
+          if (!valid) {
+            break
+          }
+        }
+        if (valid) {
+          found = true
+        }
+      }
+    }
+
+    // hack
+    let type
+    if (entity.type) {
+      type = entity.type
+    }
+
+    return {
+      x: tile.pos.x,
+      y: tile.pos.y,
+      type
+    }
   }
 }
 

@@ -61,6 +61,10 @@ class GameScreen extends Container {
     this.pickupsCounter = 0
     GameData.set('pickups', this.pickupsCounter)
 
+    // not sure if this should go here, but we'll work with it for now
+    this.eyeballsCounter = 0
+    this.eyeballsMax = 3
+
     this.setEndGame()
   }
 
@@ -130,11 +134,15 @@ class GameScreen extends Container {
       this.finalExit.name = 'Final Exit'
     }
 
+    this.enemies = camera.add(new Container())
+    this.enemies.type = 'enemies'
+
     EventsHandler.listen('changeLevel', ({ link, level: levelName }) => {
       const { camera, worldMap, mageChar } = this
       camera.remove(c => c.name === this.map.name)
       camera.remove(c => c.type === 'portals')
       camera.remove(c => c.type === 'pickups')
+      camera.remove(c => c.type === 'enemies')
 
       const level = worldMap.level(levelName)
       this.level = level
@@ -170,6 +178,14 @@ class GameScreen extends Container {
         camera.remove(c => c.name === 'Final Exit')
         delete this.finalExit
       }
+
+      this.enemies = camera.add(new Container())
+      this.enemies.type = 'enemies'
+      map.spawns.enemies.forEach(data => {
+        const { type, x, y, properties = {} } = data
+        const enemy = this.enemies.add(this.makeEnemy(type))
+        enemy.pos.set(x, y)
+      })
 
       // spawn the player on the newly loaded map, at the link
       // to the portal they triggered in the previous map
@@ -275,7 +291,15 @@ class GameScreen extends Container {
 
   updatePlaying (dt) {
     // check bullet collision
-    const { bullets, enemies, mageChar, pickups, portals } = this
+    const { bullets, enemies, eyeballsCounter, eyeballsMax, map, mageChar, pickups, portals } = this
+
+    if (eyeballsCounter < eyeballsMax) {
+      const eyeball = this.makeEnemy('eyeball')
+      eyeball.type = 'eyeball'
+      map.spawnEntity(eyeball, {}, mageChar)
+      this.enemies.add(eyeball)
+      this.eyeballsCounter++
+    }
 
     bullets.map(bullet => {
       if (enemies) {
@@ -283,6 +307,9 @@ class GameScreen extends Container {
           if (!bullet.dead && entity.hit(enemy, bullet)) {
             bullet.dead = true
             enemy.hit(bullet.dmg)
+            if (enemy.type === 'eyeball') {
+              this.eyeballsCounter--
+            }
           }
         })
       }
