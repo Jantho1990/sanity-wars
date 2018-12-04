@@ -122,9 +122,19 @@ class TitleScreen extends Container {
     })
     controlText3.pos.set(
       game.percentOfGameWidthCentered(50, controlText3),
-      game.percentOfGameHeightCentered(80, controlText3)
+      game.percentOfGameHeightCentered(75, controlText3)
     )
     this.controlText3 = this.add(controlText3)
+    
+    const controlText4 = new Text('"E" to open portals', {
+      font: '10pt Arial',
+      fill: 'black'
+    })
+    controlText4.pos.set(
+      game.percentOfGameWidthCentered(50, controlText4),
+      game.percentOfGameHeightCentered(80, controlText4)
+    )
+    this.controlText4 = this.add(controlText4)
   }
 
   update (dt, t) {
