@@ -32,9 +32,13 @@ class SanityBarComponent extends UserInterfaceComponent {
   update () {
     const { percent } = this
 
-    const manaCurrent = GameData.get('player').manaCurrent * percent
+    try {
+      const manaCurrent = GameData.get('player').manaCurrent * percent
 
-    this.manaBarCurrent.w = manaCurrent
+      this.manaBarCurrent.w = manaCurrent
+    } catch (e) {
+
+    }
 
     // super.render()
   }
