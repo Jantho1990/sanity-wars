@@ -70,10 +70,10 @@ class GameScreen extends Container {
 
     // not sure if this should go here, but we'll work with it for now
     this.eyeballsCounter = 0
-    this.eyeballSpawnRate = 10
+    this.eyeballSpawnRate = 5
     this.eyeballSpawnCounter = 0
     this.eyeballsMax = 3
-    this.eyeballsMaxRate = 60
+    this.eyeballsMaxRate = 37
     this.eyeballsMaxRateCounter = 0
     this.eyeballsMaxHardLimit = 7
 
@@ -82,6 +82,7 @@ class GameScreen extends Container {
 
   setEndGame () {
     EventsHandler.listen('finalExit', () => {
+      sounds.music[0].stop()
       // Game restart callback
       const callback = () => {
         this.game.setScene(
