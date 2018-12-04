@@ -17,7 +17,7 @@ class TestEndGoodScreen extends Container {
     this.drawBackground()
 
     const text1 = new Text('You reached the final exit.', {
-      font: '40pt Arial',
+      font: '20pt Arial',
       fill: 'black'
     })
     text1.pos.set(
@@ -27,7 +27,7 @@ class TestEndGoodScreen extends Container {
     this.text1 = this.add(text1)
     
     const text2 = new Text('You did a good job.', {
-      font: '40pt Arial',
+      font: '20pt Arial',
       fill: 'black'
     })
     text2.pos.set(

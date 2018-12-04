@@ -3,10 +3,11 @@ import TileMap from '../titus/TileMap'
 import Texture from '../titus/Texture'
 import { rand, randOneFrom, distance } from '../titus/utils/math'
 
-const texture = new Texture("resources/tilesets/opp_jungle/Jungle_terrain.png")
+const texture = new Texture("resources/tilesets/moon-dirt/platformertiles.png")
 
 class PortalMapLevel extends TileMap {
   constructor (data, parsed) {
+    
     if (!parsed) {
       data = tiledParser(data)
     }
@@ -14,14 +15,19 @@ class PortalMapLevel extends TileMap {
     const { tileW, tileH, mapW, mapH, tiles } = data
     super(tiles, mapW, mapH, tileH, tileW, texture)
 
+    
     this.spawns = parsed ? data.spawns : this.getSpawnLocations(data)
     this.data = data
   }
 
   getSpawnLocations (data) {
+    
     const player = this.spawnPlayer()
+    
     let pickup = this.spawnPickup(player)
+    
     let portal1 = this.spawnPortal(player, pickup)
+    
     let portal2 = this.spawnPortal(player, pickup, portal1)
 
     // hackish way to keep portals from spawning on top of each other
@@ -37,7 +43,8 @@ class PortalMapLevel extends TileMap {
       portals: [
         portal1,
         portal2
-      ]
+      ],
+      enemies: []
     }
   }
 
@@ -66,7 +73,7 @@ class PortalMapLevel extends TileMap {
     let x, y
 
     // specify where the corners of the map are
-    const offset = 5 // offset in tiles
+    const offset = 6 // offset in tiles
     let cornersX = [
       [0, offset],
       [mapW - offset, mapW]
@@ -237,6 +244,94 @@ class PortalMapLevel extends TileMap {
     }
 
     this.spawns.finalExit = finalSpawn
+  }
+
+  /**
+   * Spawn an entity on a random location on the map.
+   *
+   * @param {object} entity An entity object.
+   * @param {object} config Any additional settings.
+   * @param {...object} avoid Entities to avoid.
+   * 
+   * @return {object} The spawned entity.
+   */
+  spawnEntity (entity, config = {}, ...avoid) {
+    const { mapW, mapH, tileW, tileH } = this
+    const { onTheGround, offScreen, offMap } = config
+    let found = false
+    let x, y
+
+
+    let tile, tileAbove, tileBelow
+    while (!found) {
+      // this is ugly :(
+      if (!offMap) {
+        x = rand(mapW)
+        y = rand(mapH)
+
+        tile = this.tileAtMapPos({ x, y })
+
+        let groundCheck = true
+        if (onTheGround) {
+          tileAbove = this.tileAtMapPos({ x, y: y - 1 })
+          tileBelow = this.tileAtMapPos({ x, y: y + 1 })
+          groundCheck = tileAbove.frame.walkable && !tileBelow.frame.walkable
+        }
+
+        if (tile.frame.walkable &&
+            groundCheck) {
+          found = this.avoidEntities(tile.pos, ...avoid)
+          if (found) {
+            // this is also ugly :(
+            x = tile.pos.x
+            y = tile.pos.y
+          }
+        }
+      } else {
+        let offset = 300
+        let w = mapW * tileW
+        let h = mapH * tileH
+        x = randOneFrom([
+          rand(-offset, 0),
+          rand(w, w + offset)
+        ]),
+        y = randOneFrom([
+          rand(-offset, 0),
+          rand(h, h + offset)
+        ])
+        found = this.avoidEntities({ x, y }, ...avoid)
+      }      
+    }
+
+    // hack
+    let type
+    if (entity.type) {
+      type = entity.type
+    }
+    if (!type) {
+      
+    }
+
+    return {
+      x,
+      y,
+      type
+    }
+  }
+
+  avoidEntities (target, ...avoid) {
+    let valid = true
+    for (let i = 0; i < avoid.length; i++) {
+      valid = this.isFarEnoughAway(target, avoid[i])
+      if (!valid) {
+        break
+      }
+    }
+    if (valid) {
+      return true
+    }
+
+    return false
   }
 }
 
