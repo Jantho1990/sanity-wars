@@ -14,7 +14,7 @@ class DataStore {
   }
 
   get (key) {
-    if (data[key]) {
+    if (typeof data[key] !== 'undefined') {
       return data[key]
     }
 

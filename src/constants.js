@@ -42,3 +42,8 @@ export const WALL_JUMP_IMPULSE = 500
  * The amount of time to register additional input on a drop, in seconds.
  */
 export const DROP_WAIT_TIME = 0.25
+
+/**
+ * The amount of time to wait before allowing portal use.
+ */
+export const PORTAL_WAIT_TIME = 0.25

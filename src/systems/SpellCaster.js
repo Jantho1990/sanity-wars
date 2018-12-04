@@ -36,8 +36,6 @@ class SpellCaster {
     }
 
     this.recharge(dt)
-    window.Debug.addLine('Mana', this.manaCurrent)
-    window.Debug.addLine('Mana Amount', this.rechargeAmount)
   }
 
   cast (spellName) {

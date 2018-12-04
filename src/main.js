@@ -6,9 +6,13 @@ import { convertUnit } from '../titus/utils/conversion'
 import GameScreen from './screens/GameScreen'
 import KeyControls from '../titus/controls/KeyControls'
 import Overlay from './ui/Overlay';
+import TitleScreen from './screens/TitleScreen';
 
 let width = window.innerWidth * 2/3
 let height = window.innerHeight * 4/5
+
+width = 32 * 15
+height = 32 * 10
 
 const game = new Game(width, height)
 const controls = {
@@ -38,6 +42,12 @@ function startGame(toLevel, spawn) {
   )
 }
 
-startGame(1, null)
+function startTitleScreen () {
+  game.setScene(
+    new TitleScreen(game, controls, () => startGame(1, null))
+  )
+}
+
+startTitleScreen()
 
 game.run()
