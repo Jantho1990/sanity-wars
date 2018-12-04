@@ -70,10 +70,10 @@ class GameScreen extends Container {
 
     // not sure if this should go here, but we'll work with it for now
     this.eyeballsCounter = 0
-    this.eyeballSpawnRate = 0.33
+    this.eyeballSpawnRate = 10
     this.eyeballSpawnCounter = 0
     this.eyeballsMax = 3
-    this.eyeballsMaxRate = 10
+    this.eyeballsMaxRate = 60
     this.eyeballsMaxRateCounter = 0
     this.eyeballsMaxHardLimit = 7
 
@@ -277,7 +277,6 @@ class GameScreen extends Container {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER, UPDATING } = states
 
-    window.Debug.addLine('Camera Children', this.camera.children.length)
 
     switch (state.get()) {
       case LOADING:

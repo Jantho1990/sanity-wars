@@ -34,7 +34,6 @@ class Events {
       // hack fixing by forcing eventQueue to become an empty array
       return false
     })
-    window.Debug.addLine('Events in queue', events.length)
 
     this.eventQueue = []
   }

@@ -22,9 +22,14 @@ class PickupCounterComponent extends UserInterfaceComponent {
   }
 
   update () {
-    const count = `Tomes: ${GameData.get('pickups')}`
+    try {
 
-    this.count.text = count
+      const count = `Tomes: ${GameData.get('pickups')}`
+      this.count.text = count
+    } catch (e) {
+
+    }
+
   }
 }
 
