@@ -93,10 +93,8 @@ class GameScreen extends Container {
       let screen
       if (this.pickupsCounter === this.worldMap.levels.length) {
         screen = new TestEndGoodScreen(this.game, this.controls, callback)
-      } else if (this.pickupsCounter > 0) {
-        screen = new TestEndPartialGoodScreen(this.game, this.controls, callback)
       } else {
-        screen = new TestEndScreen(this.game, this.controls, callback)
+        screen = new TestEndPartialGoodScreen(this.game, this.controls, callback)
       }
 
       this.game.setScene(screen)

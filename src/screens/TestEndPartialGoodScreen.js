@@ -16,7 +16,7 @@ class TestEndPartialGoodScreen extends Container {
 
     this.drawBackground()
 
-    const text1 = new Text('You made it out alive, and with your sanity intact, but you left without completing your mission! ', {
+    const text1 = new Text('You made it out with your sanity intact, but without completing your mission! ', {
       font: '10pt Arial',
       fill: 'black'
     })
