@@ -73,7 +73,7 @@ class GameScreen extends Container {
     this.eyeballSpawnRate = 0.33
     this.eyeballSpawnCounter = 0
     this.eyeballsMax = 3
-    this.eyeballsMaxRate = 10
+    this.eyeballsMaxRate = 60
     this.eyeballsMaxRateCounter = 0
     this.eyeballsMaxHardLimit = 7
 
@@ -110,7 +110,7 @@ class GameScreen extends Container {
       gameState,
       worldMap
     } = this
-    const level = worldMap.level('Moon6')
+    const level = worldMap.level('Moon1')
     this.level = level
 
     const map = level.map

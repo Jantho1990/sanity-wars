@@ -1,13 +1,13 @@
 export default {
   "levels": [
     {
-      "name": "Moon1",
-      "url": "resources/levels/Moon1.json",
-      "tileset": "platformertiles"
-    },
-	{
       "name": "Moon6",
       "url": "resources/levels/Moon6.json",
+      "tileset": "platformertiles"
+    },
+    {
+      "name": "Moon1",
+      "url": "resources/levels/Moon1.json",
       "tileset": "platformertiles"
     },
     {
