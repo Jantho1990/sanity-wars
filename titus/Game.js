@@ -23,9 +23,6 @@ export const GameData = new DataStore()
  */
 class Game {
   constructor(w, h, parent = "#board") {
-    // Use the debug console
-    window.Debug = new Debug()
-    window.Debug.showConsole()
     this.w = w
     this.h = h
     this.renderer = new CanvasRenderer(w, h)
@@ -63,18 +60,14 @@ class Game {
    */
   run(gameUpdate = () => {}) {
     Assets.onReady(() => {
-      if (window.Debug) this.gamesRunning++
       let dt = 0
       let last = 0
       const loop = ms => {
         const { scene, renderer, fadeTime } = this
 
-        if (window.Debug) {
-          window.Debug.addLine('Games Running', this.gamesRunning)
-        }
+        
         
         const t = ms / 1000 // Convert to seconds
-        if (window.Debug) this.framesPerSecond(t)
         dt += Math.min(t - last, MAX_FRAME) // prevent ginormous jump in dt
         last = t
         
@@ -108,7 +101,6 @@ class Game {
         } else {
           this.transitioning = false
         }
-        if (window.Debug) window.Debug.update()
         EventsHandler.update()
 
         requestAnimationFrame(loop)
@@ -145,7 +137,6 @@ class Game {
       curSec++
     }
     this.frames++
-    window.Debug.addLine('Frames', frames)
   }
 
   /**

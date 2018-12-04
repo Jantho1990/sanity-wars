@@ -60,7 +60,6 @@ function checkCollisions (tiles) {
         // ent.pos.y -= offset
         yo -= offset
       }
-      window.Debug.addLine('yo slope', math.pointSlopeY(pos, m, xo))
       // debugger
     })
   })
@@ -127,7 +126,6 @@ export default function wallslide(ent, map, x = 0, y = 0) {
     }
   }
 
-  window.Debug.addLine('yo', yo)
 
   // xo and yo contain the amount we're allowed to move by
   return {

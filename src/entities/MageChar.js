@@ -108,7 +108,6 @@ class MageChar extends PlayerChar {
       this.die()
     }
 
-    window.Debug.addLine('HP', this.hp.current)
 
     // hack to stop walk
     if (!this.hasDied && !this.dying && this.vel.x === 0) {
