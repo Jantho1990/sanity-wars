@@ -85,6 +85,18 @@ class MageChar extends PlayerChar {
     this.anims.play('stand')
 
     this.updateGameData()
+
+    // hack to reset spell visuals
+    GameData.set('Fireball', {
+      sacrificed: false,
+      sacrificeTime: 0,
+      sacrificeTimeTotal: this.spellcaster.sacrificeTime
+    })
+    GameData.set('Levitate', {
+      sacrificed: false,
+      sacrificeTime: 0,
+      sacrificeTimeTotal: this.spellcaster.sacrificeTime
+    })
   }
 
   update (dt, t) {
@@ -167,13 +179,33 @@ class MageChar extends PlayerChar {
 
     if (spellcaster.isSacrificed(spell)) {
       this.activeSpell = spell.name
+      GameData.set(spell.name, {
+        sacrificed: true
+      })
     } else {
       spellcaster.sacrifice(spell)
+      GameData.set(spell.name, {
+        sacrified: false,
+        sacrificeTime: spellcaster.sacrificeTimeCounter,
+        sacrificeTimeTotal: spellcaster.sacrificeTime
+      })
     }
   }
 
   afterSwitchActiveSpell () {
     this.spellcaster.cancelSacrifice()
+
+    // Hackish way to cancel any ongoing sacrifice visual
+    GameData.set('Fireball', {
+      sacrificed: this.spellcaster.isSacrificed({name: 'Fireball'}),
+      sacrificeTime: 0,
+      sacrificeTimeTotal: this.spellcaster.sacrificeTime
+    })
+    GameData.set('Levitate', {
+      sacrificed: this.spellcaster.isSacrificed({name: 'Levitate'}),
+      sacrificeTime: 0,
+      sacrificeTimeTotal: this.spellcaster.sacrificeTime
+    })
   }
 
   addBuff (buff) {
