@@ -1,3 +1,5 @@
+import Sound from "../../titus/sound/Sound";
+
 /**
  * Mechanic entity. By default, it boosts sanity recharge. When
  * sacrificed, it restores player sanity and gives access to a spell,
@@ -9,6 +11,7 @@ class SanityBuff {
     this.boost = boost
 
     this.sacrificed = false
+    this.sound = new Sound('resources/sounds/MageScream.mp3')
   }
 
   update (dt, t) {
@@ -17,6 +20,7 @@ class SanityBuff {
 
   sacrifice () {
     this.sacrificed = true
+    this.sound.play()
   }
 }
 

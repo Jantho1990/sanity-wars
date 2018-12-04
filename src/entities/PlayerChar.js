@@ -108,7 +108,7 @@ class PlayerChar extends FrameSprite {
       let key = action[action]
       let isActive = false
       if (!Array.isArray(actions[action])) {
-        isActive = controls.keys.key(actions[action])
+        isActive = !!controls.keys.key(actions[action])
       } else {
         for (let i = 0; i < actions[action].length; i++) {
           key = actions[action][i]
@@ -127,7 +127,7 @@ class PlayerChar extends FrameSprite {
         this.currentActions[action] = false
         const afterAction = `after${action[0].toUpperCase() + action.substr(1)}`
         if (this[afterAction]){
-          this[afterAction](key)
+          this[afterAction]()
         }
       }
     })
