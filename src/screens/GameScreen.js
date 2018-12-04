@@ -277,7 +277,6 @@ class GameScreen extends Container {
     const { state } = this
     const { LOADING, READY, PLAYING, GAMEOVER, UPDATING } = states
 
-    window.Debug.addLine('Camera Children', this.camera.children.length)
 
     switch (state.get()) {
       case LOADING:
