@@ -16,8 +16,8 @@ class TestEndPartialGoodScreen extends Container {
 
     this.drawBackground()
 
-    const text1 = new Text('You reached the final exit.', {
-      font: '20pt Arial',
+    const text1 = new Text('You made it out alive, and with your sanity intact, but you left without completing your mission! ', {
+      font: '10pt Arial',
       fill: 'black'
     })
     text1.pos.set(
@@ -26,8 +26,8 @@ class TestEndPartialGoodScreen extends Container {
     )
     this.text1 = this.add(text1)
     
-    const text2 = new Text('You did an OK job.', {
-      font: '20pt Arial',
+    const text2 = new Text('Please go back and try again!  The world is depending on you!', {
+      font: '10pt Arial',
       fill: 'black'
     })
     text2.pos.set(

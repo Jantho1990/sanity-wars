@@ -16,8 +16,8 @@ class TestEndGoodScreen extends Container {
 
     this.drawBackground()
 
-    const text1 = new Text('You reached the final exit.', {
-      font: '20pt Arial',
+    const text1 = new Text('You found all the ancient Tomes of Knowledge!', {
+      font: '10pt Arial',
       fill: 'black'
     })
     text1.pos.set(
@@ -26,8 +26,8 @@ class TestEndGoodScreen extends Container {
     )
     this.text1 = this.add(text1)
     
-    const text2 = new Text('You did a good job.', {
-      font: '20pt Arial',
+    const text2 = new Text('With these, the Dread Overlord will finally be overthrown!', {
+      font: '10pt Arial',
       fill: 'black'
     })
     text2.pos.set(
@@ -35,6 +35,16 @@ class TestEndGoodScreen extends Container {
       game.percentOfGameHeightCentered(65, text2)
     )
     this.text2 = this.add(text2)
+    
+    const text3 = new Text('You have saved the world!', {
+      font: '10pt Arial',
+      fill: 'black'
+    })
+    text3.pos.set(
+      game.percentOfGameWidthCentered(50, text3),
+      game.percentOfGameHeightCentered(80, text3)
+    )
+    this.text3 = this.add(text3)
   }
 
   update (dt, t) {

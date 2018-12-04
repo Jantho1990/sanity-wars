@@ -70,7 +70,7 @@ class GameScreen extends Container {
 
     // not sure if this should go here, but we'll work with it for now
     this.eyeballsCounter = 0
-    this.eyeballSpawnRate = 0.33
+    this.eyeballSpawnRate = 10
     this.eyeballSpawnCounter = 0
     this.eyeballsMax = 3
     this.eyeballsMaxRate = 60
