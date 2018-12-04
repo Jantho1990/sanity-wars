@@ -82,6 +82,7 @@ class GameScreen extends Container {
 
   setEndGame () {
     EventsHandler.listen('finalExit', () => {
+      sounds.music[0].stop()
       // Game restart callback
       const callback = () => {
         this.game.setScene(
