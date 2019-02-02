@@ -32,7 +32,7 @@ export function distance(a, b) {
 /**
  * Get the coordinates for a direction based on an angle.
  *
- * @param {number} angle An angle, in degrees.
+ * @param {number} angle An angle, in radians.
  *
  * @return {object}
  */
